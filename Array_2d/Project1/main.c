@@ -21,31 +21,39 @@
 
 void main()
 {
-	ONEPROPERTY* tmp;
-	LIST* example;
-	HASHTABLE* gg;
-	
-	void* pOneProperty = NULL;
-	void* pList = NULL;
-	void* pHash = NULL;
-	void* pQml = NULL;
+	FILE* pFile;
+	errno_t ErrorInTheFile;
+	char* buffer;
+	ONEPROPERTY * fff;
+	int i;
 
 	init_OnePropertyClass();
-	pOneProperty = new(OneProperty, "HELLO");
-	draw(pOneProperty);
-
 	init_ListClass();
-	pList = new(List,0,0, "hello");
-
 	init_QmlObjectClass();
-	pHash = new(HashTable, 5, NULL);
-	pQml = new(QmlObject, 5, NULL, "EXAMPLE");
 
-	delete(pOneProperty);
-	delete(pList);
-	delete(pHash);
-	delete(pQml);
+	QMLOBJECT *a = new(QmlObject, 1, NULL, /*NULL,*/ "_x_y_width_height_id_color_");
 
+	ErrorInTheFile = fopen_s(&pFile, "Button.txt", "r");
+	if (ErrorInTheFile == 0)
+	{
+		MyParser(a, pFile);
+	}
+	else
+	{
+		printf("ERROR");
+	}
+	//assert(ht_get((Pointer)a->InternalHashTable, "id") == "QMLObject");
+
+	fff = (struct Object*)a->_.table[0]->next->data;
+	buffer = fff->value;
+	for (i = 0; i < strlen(buffer); i++)
+	{
+		printf("%c", buffer[i]);
+	}
+	printf("\n");
+
+	//printf("\n%d\n", jenkins_one_at_a_time_hash("vasya"));
+	delete(a);
 	_CrtDumpMemoryLeaks();
 	system("pause");
 }

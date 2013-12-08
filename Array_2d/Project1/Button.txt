@@ -1,0 +1,5 @@
+{
+id:QMLObject
+color:black
+vasay:ffffff
+}

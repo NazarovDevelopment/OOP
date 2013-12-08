@@ -15,4 +15,9 @@ extern const void * QmlObject;     // использование: new(Circle, x,
 
 void init_QmlObjectClass(void);
 
+
+void MyParser(struct QmlObject* Qobject, FILE *pFile);
+
+
+
 #endif

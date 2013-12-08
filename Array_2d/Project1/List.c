@@ -68,17 +68,8 @@ static void * ListClass_ctor(void * _pSelf, va_list * ppArgs)
 	return pSelf;
 }
 
-
-/* ----------------------------------------------------------------------------------------------- *
-*      объявление переменных с мета-информацией о типах POINT и POINT_CLASS
-*/
-
-static OBJECT_CLASS List_info; // мета-информация о типе POINT_CLASS
-static LIST_CLASS   List_class_info;       // мета-информация о типе POINT
-
-/* ----------------------------------------------------------------------------------------------- *
-*      инициализация "красивых" констант-указателей на мета-информацию о POINT и POINT_CLASS
-*/
+static OBJECT_CLASS List_info; 
+static LIST_CLASS   List_class_info; 
 
 const void * ListClass = &List_class_info;
 const void * List = &List_info;
@@ -87,26 +78,26 @@ const void * List = &List_info;
 void init_ListClass(void)
 {
 	inplace_new(
-		&List_class_info, // мета-информация о типе POINT_CLASS
-		ObjectClass,       // мета-информация является экземпляром типа OBJECT_CLASS
+		&List_class_info, 
+		ObjectClass,       
 
-		"OnePropertyClass",        // символическое имя типа
-		ObjectClass,         // мета-информация о предке (предок POINT_CLASS -> OBJECT_CLASS)
-		sizeof(LIST_CLASS), // размер типа в байтах
+		"OnePropertyClass",   
+		ObjectClass,        
+		sizeof(LIST_CLASS), 
 
 		ctor, ListClass_ctor,
 		0
 		);
 
 	inplace_new(
-		&List_info, // мета-информация о типе POINT
-		ListClass,  // мета-информация является экземпляром типа POINT_CLASS
+		&List_info, 
+		ListClass,  
 
-		"List",       // символическое имя типа
-		Object,        // мета-информация о предке (предок POINT -> OBJECT)
-		sizeof(LIST), // размер типа в байтах
+		"List",       
+		Object,       
+		sizeof(LIST), 
 
-		ctor, List_ctor, // переопределено динамическое связывание ctor -> Point_ctor
+		ctor, List_ctor, 
 		draw, List_draw,
 		dtor, List_dtor,
 		0
@@ -114,19 +105,8 @@ void init_ListClass(void)
 }
 
 extern void base_draw(const void * _pClass, const void * _pSelf);
-//{
-//	const LIST_CLASS * pBaseClass = baseOf(_pClass);
-//	assert(_pSelf && pBaseClass->pfnDraw);
-//	pBaseClass->pfnDraw(_pSelf);
-//}
-
 
 extern void draw(const void * _pSelf);
-//{
-//	const LIST_CLASS * pClass = classOf(_pSelf);
-//	assert(pClass->pfnDraw);
-//	pClass->pfnDraw(_pSelf);
-//}
 
 void * List_dtor(void* _self)
 {
@@ -147,4 +127,94 @@ void * List_dtor(void* _self)
 	return self;
 }
 
+//------------------------------------------------------------------------------------
+//Старые функции для листа
+void* list_remove_all(void* _list, char* key)
+{
+	struct List* list = (struct List*)_list;
+	struct List* curlist;
+	struct List* buflist;
+	curlist = list;
+	while (!strcmp(curlist->key, key))
+	{
+		curlist = curlist->next;
+		list_delete_one(list);
+		list = curlist;
+		if (list == NULL)
+		{
+			return list;
+		}
+	}
+	while (curlist->next)
+	{
+		while (!strcmp(curlist->key, key))
+		{
+			curlist = curlist->next;
+			list_delete_one(list);
+			list = curlist;
+			if (list == NULL)
+			{
+				return list;
+			}
+		}
+		if (curlist->next == NULL)
+		{
+			return list;
+		}
+		if (!strcmp(curlist->next->key, key))
+		{
+			buflist = curlist->next;
+			curlist->next = curlist->next->next;
+			list_delete_one(buflist);
+		}
+		if (curlist->next == NULL)
+		{
+			return list;
+		}
+		curlist = curlist->next;
+	}
+	return list;
+}
 
+void* list_prepend(void* _list, char* key, struct Object* data, size_t sizedata)
+{
+	struct List* list = (struct List*) _list;
+	struct List* newlist;
+	newlist = new(List, sizedata, data, key);
+	newlist->next = list;
+	return newlist;
+}
+
+void* list_foreach(void* _list, void(*f)(char *key, void* data))
+{
+	struct List* list = _list;
+	struct List* start_list;
+	start_list = list;
+	while (list != NULL)
+	{
+		f(list->key, list->data);
+		list = list->next;
+	}
+	return start_list;
+}
+
+int list_has(void* _list, char* key)
+{
+	struct List* list = _list;
+	while (list != NULL)
+	{
+		if (strcmp(list->key, key) == 0)
+		{
+			return 1;
+		}
+		list = list->next;
+	}
+	return 0;
+}
+
+void list_delete_one(void* _self)
+{
+	struct List* self = _self;
+	delete(self->data);
+	free(self);
+}

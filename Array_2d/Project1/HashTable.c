@@ -3,6 +3,8 @@
 
 #include "HashTable.h"
 #include "HashTable_r.h"
+#include "List.h"
+#include "List_r.h"
 
 typedef unsigned(*HashFunction)(char *key);
 
@@ -92,36 +94,24 @@ static void * HashTableClass_ctor(void * _pSelf, va_list * ppArgs)
 	return pSelf;
 }
 
+static OBJECT_CLASS HashTable_class_info; 
+static HASHTABLE_CLASS  HashTable_info;   
 
-/* ----------------------------------------------------------------------------------------------- *
-*      объявление переменных с мета-информацией о типах POINT и POINT_CLASS
-*/
-
-static OBJECT_CLASS HashTable_class_info; // мета-информация о типе POINT_CLASS
-static HASHTABLE_CLASS  HashTable_info;       // мета-информация о типе POINT
-
-/* ----------------------------------------------------------------------------------------------- *
-*      инициализация "красивых" констант-указателей на мета-информацию о POINT и POINT_CLASS
-*/
 
 const void * HashTableClass = &HashTable_class_info;
 const void * HashTable = &HashTable_info;
 
-/* ----------------------------------------------------------------------------------------------- *
-*      автоматическая инициализация структур с мета-информацией об POINT и POINT_CLASS
-*/
-
 void init_HashTableClass(void)
 {
 	inplace_new(
-		&HashTable_class_info, // мета-информация о типе POINT_CLASS
-		ObjectClass,       // мета-информация является экземпляром типа OBJECT_CLASS
+		&HashTable_class_info,
+		ObjectClass,       
 
-		"HashTasbleClass",        // символическое имя типа
-		ObjectClass,         // мета-информация о предке (предок POINT_CLASS -> OBJECT_CLASS)
-		sizeof(HASHTABLE_CLASS), // размер типа в байтах
+		"HashTasbleClass",  
+		ObjectClass,        
+		sizeof(HASHTABLE_CLASS), 
 
-		ctor, HashTableClass_ctor, // переопределено динамическое связывание ctor->PointClass_ctor
+		ctor, HashTableClass_ctor,
 		0
 		);
 
@@ -163,10 +153,114 @@ void* HashTable_dtor(void* _self)
 
 extern void draw(const void * _pSelf);
 
-
-/* ----------------------------------------------------------------------------------------------- *
-*      вспомогательная функция вызывающие методы базового типа
-*              допустим вызов этой функции для наследников POINT
-*/
-
 extern void base_draw(const void * _pClass, const void * _pSelf);
+
+//---------------------------------------------------------------------------------------------------------------
+//Старые функции для хэш
+
+void* ht_set(void* _self, char *key, void* data, size_t sizedata)
+{
+	HASHTABLE* self = _self;
+	LIST* newlist;
+	LIST* buf;
+	unsigned index;
+	int ddd;
+
+	index = self->hf(key) % self->size;
+	buf = self->table[index];
+	while (buf != NULL)
+	{
+		if (strcmp(buf->key, key) == 0)
+		{
+			delete(buf->data);
+			buf->data = (struct Object*)data;
+			return self;
+		}
+		buf = buf->next;
+	}
+	self->table[index] = list_prepend(self->table[index], key, data, sizedata);
+	return self;
+}
+
+void* ht_get(void* _self, char *key)
+{
+	struct HashTable* self = _self;
+	size_t index;
+	struct List * buf;
+	index = self->hf(key) % self->size;
+	buf = self->table[index];
+	while (buf != NULL)
+	{
+		if (strcmp(buf->key, key) == 0)
+		{
+			return buf->data;
+		}
+		buf = buf->next;
+	}
+	return NULL;
+}
+
+int ht_has(void* _self, char *key)
+{
+	struct HashTable* self = _self;
+	size_t index;
+	struct List * buf;
+	index = self->hf(key) % self->size;
+	buf = self->table[index];
+	if (list_has(buf, key) == 1)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+void* ht_delete(void* _self, char* key)
+{
+	struct HashTable* self = _self;
+	size_t index;
+	index = self->hf(key) % self->size;
+	if (!self->table[index])
+	{
+		return self;
+	}
+	self->table[index] = list_remove_all(self->table[index], key);
+	return self;
+}
+
+void* ht_traverse(void* _self, void(*f)(char *key, void* data))
+{
+	struct HashTable* self = _self;
+	size_t i;
+	struct List * buf;
+	for (i = 0; i<self->size; i++)
+	{
+		buf = self->table[i];
+		list_foreach(buf, f);
+	}
+	return self;
+}
+
+void* ht_resize(void* _self, size_t new_size)
+{
+	struct HashTable* self = _self;
+	struct List ** new_table;
+	struct List * buf;
+	size_t i;
+	size_t index;
+	new_table = (struct List**)calloc(new_size, sizeof(struct List*));
+	for (i = 0; i<self->size; i++)
+	{
+		buf = self->table[i];
+		while (buf != 0)
+		{
+			index = self->hf(buf->key) % new_size;
+			new_table[index] = (struct List*) list_prepend(new_table[index], buf->key, buf->data, buf->size);
+			buf = buf->next;
+		}
+		delete(self->table[i]);
+	}
+	free(self->table);
+	self->table = new_table;
+	self->size = new_size;
+	return self;
+}
