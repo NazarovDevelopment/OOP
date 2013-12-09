@@ -10,11 +10,12 @@ struct List
 {
 	const void *class;
 	char *key;
+	int size;
 	struct Object* data;
 	struct List *next;
 };
 
-Pointer list_prepend(Pointer _list, char* key, Pointer data);
+Pointer list_prepend(Pointer _list, size_t SizeData, char* key, Pointer data);
 
 Pointer list_foreach(Pointer _list, void(*f)(char *key, Pointer data));
 

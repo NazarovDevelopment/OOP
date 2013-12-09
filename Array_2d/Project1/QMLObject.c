@@ -167,7 +167,8 @@ void MyParser(struct QmlObject* QObject, FILE *pFile)
 
 			if (value && Name && (name_FLAG == NULL) && (value_FLAG == NULL))
 			{
-				new_object = new(Object, value);
+				init_OnePropertyClass();
+				new_object = new(OneProperty, value);
 				/*for (ddd = 0; ddd < strlen(new_object->value); ddd++)
 				printf("%c", ((char*)(new_object->value))[ddd]);*/
 

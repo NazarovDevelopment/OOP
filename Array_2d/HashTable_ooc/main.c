@@ -14,7 +14,7 @@ void main()
 	struct Object* obj;
 	Pointer check;
 	Pointer ht;
-	char b[] = "123";
+	char *b = "123";
 
 	obj = new(Object, 1, 1, 1);
 	printf("%d\n", obj->b);
@@ -24,7 +24,7 @@ void main()
 	ht = new(HashTable, 10, NULL);
 	/*assert(ht_has(ht, b) == 0);*/
 
-	ht_set(ht, b, obj);
+	ht_set(ht, b, obj, sizeof(Object));
 	check = ht_get(ht, b);
 
 	printf("%d\n", ((struct Object*)check)->r);

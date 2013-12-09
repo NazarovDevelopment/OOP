@@ -55,7 +55,7 @@ Pointer ht_destroy(Pointer *_self)
 	return self;
 }
 
-Pointer ht_set(Pointer _self, char *key, Pointer data)
+Pointer ht_set(Pointer _self, char *key, Pointer data, size_t SizeData)
 {
 	struct HashTable* self = _self;
 	unsigned index;
@@ -72,7 +72,7 @@ Pointer ht_set(Pointer _self, char *key, Pointer data)
 		}
 		buf = buf->next;
 	}
-	self->table[index] = list_prepend(self->table[index], key, data);
+	self->table[index] = list_prepend(self->table[index],SizeData, key, data);
 	return self;
 }
 
@@ -134,7 +134,7 @@ Pointer ht_traverse(Pointer _self, void(*f)(char *key, Pointer data))
 	return self;
 }
 
-Pointer ht_resize(Pointer _self, size_t new_size)
+Pointer ht_resize(Pointer _self, size_t new_size, size_t SizeData)
 {
 	struct HashTable* self = _self;
 	struct List ** new_table;
@@ -148,7 +148,7 @@ Pointer ht_resize(Pointer _self, size_t new_size)
 		while (buf != 0)
 		{
 			index = self->hf(buf->key) % new_size;
-			new_table[index] = list_prepend(new_table[index], buf->key, buf->data);
+			new_table[index] = list_prepend(new_table[index], SizeData, buf->key, buf->data);
 			buf = buf->next;
 		}
 		delete(self->table[i]);

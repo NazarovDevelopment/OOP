@@ -109,7 +109,6 @@ void base_draw(const void * _pClass, const void * _pSelf)
 	pBaseClass->pfnDraw(_pSelf);
 }
 
-
 void draw(const void * _pSelf)
 {
 	const ONEPROPERTY_CLASS * pClass = classOf(_pSelf);

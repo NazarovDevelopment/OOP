@@ -12,13 +12,18 @@
 
 static Pointer list_create(Pointer _self, va_list* app)
 {
-	char* keykey;
-	struct List* self = _self;
-	self->next = NULL;
+	char* bufstring;
+	struct List* self = (struct List*)_self;
+	
+	self->size = va_arg(*app, size_t);
+	self->data = calloc(1, self->size);
 	self->data = va_arg(*app, void*);
-	keykey = va_arg(*app, char*);
-	self->key = (char*)malloc(sizeof(keykey));
-	self->key = (self->key, keykey);
+
+	bufstring = va_arg(*app, char*);
+	self->key = (char*)calloc(strlen(bufstring) + 1, sizeof(char));
+	strcpy(self->key, bufstring);
+	self->next = NULL;
+
 	return self;
 }
 
@@ -69,11 +74,11 @@ Pointer list_remove_all(Pointer _list, char* key)
 	return list;
 }
 
-Pointer list_prepend(Pointer _list, char* key, Pointer data)
+Pointer list_prepend(Pointer _list,size_t SizeData, char* key, Pointer data)
 {
 	struct List* list = _list;
 	struct List* newlist;
-	newlist = new(List, data, key);
+	newlist = new(List, SizeData,data, key);
 	newlist->next = list;
 	return newlist;
 }
@@ -115,14 +120,19 @@ void list_delete_one(Pointer _self)
 Pointer list_delete(Pointer _self)
 {
 	struct List* self = _self;
+	int i;
 	struct List* buf;
+	assert(self);
+
 	while (self != NULL)
 	{
 		delete(self->data);
+		free(self->key);
 		buf = self;
 		self = self->next;
 		free(buf);
 	}
+	free(self);
 	return self;
 }
 

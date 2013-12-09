@@ -42,17 +42,16 @@ void main()
 	{
 		printf("ERROR");
 	}
-	//assert(ht_get((Pointer)a->InternalHashTable, "id") == "QMLObject");
 
 	fff = (struct Object*)a->_.table[0]->next->data;
 	buffer = fff->value;
+	
 	for (i = 0; i < strlen(buffer); i++)
 	{
 		printf("%c", buffer[i]);
 	}
 	printf("\n");
 
-	//printf("\n%d\n", jenkins_one_at_a_time_hash("vasya"));
 	delete(a);
 	_CrtDumpMemoryLeaks();
 	system("pause");

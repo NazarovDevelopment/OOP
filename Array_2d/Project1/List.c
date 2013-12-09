@@ -23,22 +23,22 @@ static void * List_ctor(void * _pSelf, va_list * ppArgs)
 
 static void List_draw(const void* _pSelf)
 {
-	int i;
-	const struct List* pSelf = _pSelf;
-	struct List* ForDraw = pSelf;
-	printf("\n");
-	printf("Распечатка всех элементов листа");
-	printf("\n");
-
-	while (ForDraw)
-	{
+		int i;
+		const struct List* pSelf = _pSelf;
+		struct List* ForDraw = pSelf;
 		printf("\n");
-		draw(ForDraw->data);
+		printf("Распечатка всех элементов листа");
 		printf("\n");
-		ForDraw = ForDraw->next;
-	}
 
-	printf("\n");
+		while (ForDraw)
+		{
+			printf("\n");
+			draw(ForDraw->data);
+			printf("\n");
+			ForDraw = ForDraw->next;
+		}
+
+		printf("\n");
 }
 
 static void * ListClass_ctor(void * _pSelf, va_list * ppArgs)

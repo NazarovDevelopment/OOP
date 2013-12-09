@@ -3,6 +3,10 @@
 
 #include "HashTable.h"
 #include "HashTable_r.h"
+
+#include "OneProperty.h"
+#include "OneProperty_r.h"
+
 #include "List.h"
 #include "List_r.h"
 
@@ -55,6 +59,7 @@ static void HashTable_draw(const void * _pSelf)
 
 	for (i = 0; i < pSelf->size; i++)
 	{
+		if (pSelf->table[i])
 		draw(pSelf->table[i]);
 	}
 }

@@ -19,11 +19,11 @@ struct HashTable
 
 Pointer ht_get(Pointer _self, char *key);
 
-Pointer ht_resize(Pointer _self, size_t new_size);
+Pointer ht_resize(Pointer _self, size_t new_size, size_t SizeData);
 
 unsigned jenkins_one_at_a_time_hash(char *key);
 
-Pointer ht_set(Pointer _self, char *key, Pointer data);
+Pointer ht_set(Pointer _self, char *key, Pointer data, size_t SizeData);
 
 int ht_has(Pointer _self, char *key);
 
