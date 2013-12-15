@@ -18,12 +18,17 @@ OneProperty* test()
 void main()
 {
 	OneProperty* pOProp = NULL;
+	List* pList = NULL;
 	char* StringForPut = "HELLO";
 
 	pOProp = new OneProperty(StringForPut);
+	pList = new List("test", StringForPut);
 
-	pOProp->draw();
+	pList->draw();
+	pList = pList->prepend("name", "alexey");
+	//pOProp->draw();
 
+	delete(pList);
 	delete(pOProp);
 
 	_CrtDumpMemoryLeaks();

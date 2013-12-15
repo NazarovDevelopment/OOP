@@ -14,16 +14,16 @@ class List
 {
 public:
 	List();
-	List(char* Putkey, size_t size, void* Putdata);
+	List(char* Putkey, void* Putdata);
 	~List();
 
 public:
 	void draw();
-
+	void SetNext(List* pList);
+	List* prepend(char* key, void* Putdata);
 private:
 	char*key;
-	size_t SizeData;
-	void* data;
+	OneProperty* data;
 	
 	List* next;
 };
@@ -31,42 +31,57 @@ private:
 List::List()
 {
 	key = NULL;
-	SizeData = 0;
 	data = NULL;
 }
 
-List::List(char* Putkey, size_t size, void* Putdata)
+List::List(char* Putkey, void* PutValue)
 {
-	SizeData = size;
 	//key = (char*)calloc(strlen(Putkey) + 1, sizeof(char));
-	
-	
-		
-	key = (char*)calloc(strlen(Putkey) + 1, sizeof(char));
+	data = new OneProperty(PutValue);
+			
+	key = new char[strlen(Putkey)+1];//(char*)calloc(strlen(Putkey) + 1, sizeof(char));
 	strcpy(key, Putkey);
 	next = NULL;
 }
 
 List::~List()
 {
+	List* pList = this;
+
+	if (pList->next)
+	{
+		delete(pList->next);
+	}
+
 	delete(data);
-	free(key);
+	delete(key);
 	
 }
 
 void List::draw()
 {
 	List* ForDraw = this;
-	cout << endl;
-	cout << endl;
 		
 	while (ForDraw)
 	{
 		cout << endl;
-		((OneProperty*)ForDraw->data)->draw();
+		(ForDraw->data)->draw();
 		ForDraw = ForDraw->next;
 		cout << endl;
 	}
 
 	cout << endl;
+}
+
+void List::SetNext(List* pList)
+{
+	this->next = pList;
+}
+
+List* List::prepend(char* key, void* Putdata)
+{
+	List* new_list = new List(key, Putdata); 
+	new_list->SetNext(this);
+
+	return new_list;
 }

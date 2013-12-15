@@ -22,6 +22,17 @@ private:
 	void* value;
 };
 
+class b  : public OneProperty
+{
+
+	void draw()
+	{
+
+	}
+private:
+	int size;
+};
+
 OneProperty::OneProperty()
 {
 	value = 0;

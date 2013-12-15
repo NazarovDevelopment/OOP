@@ -1,5 +1,5 @@
 {
-id:QMLObject
-color:black
-vasay:ffffff
+id      :  QMLObject
+color   :  black
+vasay   :  ffffff
 }
