@@ -9,12 +9,7 @@ class OneProperty
 {
 public:
 	OneProperty();
-	OneProperty(void* PutValue, bool ItIsInt);
-	OneProperty(OneProperty &a)
-	{
-		value = calloc(strlen((char*)a.value),sizeof(char));
-		strcpy((char*)value, (char*)a.value);
-	}
+	OneProperty(void* PutValue);
 	~OneProperty();
 
 public:
@@ -32,7 +27,7 @@ OneProperty::OneProperty()
 	value = 0;
 }
 
-OneProperty::OneProperty(void* PutValue, bool ItIsInt)
+OneProperty::OneProperty(void* PutValue)
 {
 	//value = new char;
 	//memcpy(value, PutValue, sizeof(char)*strlen((char*)PutValue));
@@ -41,10 +36,8 @@ OneProperty::OneProperty(void* PutValue, bool ItIsInt)
 
 OneProperty::~OneProperty()
 {
-	//free((char*)value);
 	
 }
-
 void OneProperty::draw()
 {
 	if (value)

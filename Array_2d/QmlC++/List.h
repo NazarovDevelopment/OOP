@@ -40,8 +40,7 @@ List::List(char* Putkey, size_t size, void* Putdata)
 	SizeData = size;
 	//key = (char*)calloc(strlen(Putkey) + 1, sizeof(char));
 	
-	data = new OneProperty("", 1);
-	((OneProperty*)data)->SetValue(((OneProperty*)Putdata)->GetValue);
+	
 		
 	key = (char*)calloc(strlen(Putkey) + 1, sizeof(char));
 	strcpy(key, Putkey);
