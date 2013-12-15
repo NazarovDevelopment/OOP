@@ -5,6 +5,7 @@
 
 #include "OneProperty.h"
 #include "List.h"
+#include "HashTable.h"
 
 using namespace std;
 
@@ -17,20 +18,12 @@ OneProperty* test()
 
 void main()
 {
-	OneProperty* pOProp = NULL;
-	List* pList = NULL;
-	char* StringForPut = "HELLO";
+	HashTable* pHash = new HashTable(1);
+	pHash->set("name", "vasiliy");
+	pHash->set("id", "property");
+		
 
-	pOProp = new OneProperty(StringForPut);
-	pList = new List("test", StringForPut);
-
-	pList->draw();
-	pList = pList->prepend("name", "alexey");
-	//pOProp->draw();
-
-	delete(pList);
-	delete(pOProp);
-
+	delete(pHash);
 	_CrtDumpMemoryLeaks();
 	system("pause");
 }

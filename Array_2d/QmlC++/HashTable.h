@@ -11,7 +11,10 @@ public:
 	HashTable(size_t ArraySize);
 	HashTable(size_t ArraySize, HashFunction hfunc);
 	~HashTable();
-	
+
+public:
+
+	void set(char* Putkey, void* Putvalue);
 private:
 	List** table;
 	size_t size;
@@ -19,13 +22,73 @@ private:
 
 };
 
+unsigned jenkins_one_at_a_time_hash(char *key) {
+	unsigned hash = 0;
+
+	for (; *key; ++key) {
+		hash += *key;
+		hash += (hash << 10);
+		hash ^= (hash >> 6);
+	}
+	hash += (hash << 3);
+	hash ^= (hash >> 11);
+	hash += (hash << 15);
+	return hash;
+}
+
 HashTable::HashTable(size_t ArraySize)
 {
 	size = ArraySize;
 
 	table = new List*[size];//(struct List**)calloc(pSelf->size, sizeof(struct List*));
-
-	hf = ;
+	hf = jenkins_one_at_a_time_hash;
 	
+	for (int i = 0; i < size; i++)
+	{
+		table[i] = NULL;
+	}
 }
 
+HashTable::HashTable(size_t ArraySize, HashFunction hfunc)
+{
+	size = ArraySize;
+
+	table = new List*[size];//(struct List**)calloc(pSelf->size, sizeof(struct List*));
+	hf = hfunc;
+
+	for (int i = 0; i < size; i++)
+	{
+		table[i] = NULL;
+	}
+}
+
+HashTable::~HashTable()
+{
+	for (int i = 0; i < size; i++)
+	{
+		delete(table[i]);
+	}
+
+	delete(table);
+}
+
+void HashTable::set(char* Putkey, void* Putvalue)
+{
+	int index = hf(Putkey) % size;
+	List* buffer = table[index];
+
+	while (buffer != NULL)
+	{
+		if (strcmp(buffer->Getkey(), Putkey) == 0)
+		{
+			delete(buffer->data);
+			buffer->SetData(Putvalue);
+			return;
+		}
+		buffer = buffer->next;
+	}
+	List* new_list = new List(Putkey, Putvalue);
+	new_list->next = table[index];
+	table[index] = new_list;
+	//table[index] = table[index]->prepend(Putkey, Putvalue);
+}

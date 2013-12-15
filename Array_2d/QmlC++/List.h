@@ -20,12 +20,19 @@ public:
 public:
 	void draw();
 	void SetNext(List* pList);
+	void SetData(void* value);
+
 	List* prepend(char* key, void* Putdata);
+
+	char* Getkey();
+
+public:
+	OneProperty* data;
+	List* next;
+
 private:
 	char*key;
-	OneProperty* data;
 	
-	List* next;
 };
 
 List::List()
@@ -75,13 +82,25 @@ void List::draw()
 
 void List::SetNext(List* pList)
 {
-	this->next = pList;
+	next = pList;
 }
 
 List* List::prepend(char* key, void* Putdata)
 {
 	List* new_list = new List(key, Putdata); 
-	new_list->SetNext(this);
-
+	//new_list->SetNext(this);
+	new_list->next = this;
 	return new_list;
+}
+
+char* List::Getkey()
+{
+	return key;
+}
+
+void List::SetData(void* value)
+{
+	OneProperty* pOProp = new OneProperty(value);
+
+	data = pOProp;
 }

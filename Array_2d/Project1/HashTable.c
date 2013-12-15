@@ -15,19 +15,6 @@ typedef unsigned(*HashFunction)(char *key);
 
 void* HashTable_dtor(void* _self);
 
-unsigned jenkins_one_at_a_time_hash(char *key) {
-	unsigned hash = 0;
-
-	for (; *key; ++key) {
-		hash += *key;
-		hash += (hash << 10);
-		hash ^= (hash >> 6);
-	}
-	hash += (hash << 3);
-	hash ^= (hash >> 11);
-	hash += (hash << 15);
-	return hash;
-}
 
 unsigned jenkins_one_at_a_time_hash(char *key) {
 	unsigned hash = 0;
