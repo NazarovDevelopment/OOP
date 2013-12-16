@@ -21,10 +21,12 @@ public:
 	void draw();
 	void SetNext(List* pList);
 	void SetData(void* value);
+	void foreach(void(*f)(char *key, void* data));
 
 	List* prepend(char* key, void* Putdata);
 
 	char* Getkey();
+	bool has(char* key);
 
 public:
 	OneProperty* data;
@@ -103,4 +105,28 @@ void List::SetData(void* value)
 	OneProperty* pOProp = new OneProperty(value);
 
 	data = pOProp;
+}
+
+bool List::has(char* key)
+{
+	List* list = this;
+	while (list != NULL)
+	{
+		if (strcmp(list->key, key) == 0)
+		{
+			return 1;
+		}
+		list = list->next;
+	}
+	return 0;
+}
+
+void  List::foreach(void(*f)(char *key, void* data))
+{
+	List* list = this;
+	while (list != NULL)
+	{
+		f(list->key, list->data);
+		list = list->next;
+	}
 }

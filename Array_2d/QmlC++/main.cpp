@@ -22,6 +22,7 @@ void main()
 	pHash->set("name", "vasiliy");
 	pHash->set("id", "property");
 		
+	char* test = (char*) pHash->get("id");
 
 	delete(pHash);
 	_CrtDumpMemoryLeaks();
