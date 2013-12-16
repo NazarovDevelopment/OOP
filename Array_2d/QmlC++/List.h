@@ -121,12 +121,12 @@ bool List::has(char* key)
 	return 0;
 }
 
-void  List::foreach(void(*f)(char *key, void* data))
+void  List::foreach(void(*f)(char *Putkey, void* Putvalue))
 {
 	List* list = this;
 	while (list != NULL)
 	{
-		f(list->key, list->data);
+		f(list->key, list->data->GetValue());
 		list = list->next;
 	}
 }

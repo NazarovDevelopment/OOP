@@ -21,9 +21,9 @@ void main()
 	HashTable* pHash = new HashTable(1);
 	pHash->set("name", "vasiliy");
 	pHash->set("id", "property");
-		
-	char* test = (char*) pHash->get("id");
 
+	pHash->resize(2);
+	
 	delete(pHash);
 	_CrtDumpMemoryLeaks();
 	system("pause");

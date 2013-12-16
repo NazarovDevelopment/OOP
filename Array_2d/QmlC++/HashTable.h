@@ -17,7 +17,9 @@ public:
 	void set(char* Putkey, void* Putvalue);
 	void* get(char* Putkey);
 	bool has(char* Putkey);
-
+	void traverse(void(*f)(char *key, void* data));
+	void resize(int new_size);
+	
 private:
 
 	List** table;
@@ -121,4 +123,44 @@ bool HashTable::has(char* Putkey)
 		return 1;
 	}
 	return 0;
+}
+
+void HashTable::traverse(void(*f)(char *Putkey, void* Putvalue))
+{
+	List* buf;
+	for (int i = 0; i<size; i++)
+	{
+		buf = table[i];
+		buf->foreach(f);
+	}
+}
+
+void HashTable::resize(int new_size)
+{
+	List** new_table = table;
+	int old_size = size;
+	size = new_size;
+	
+	table = new List*[new_size];
+	for (int i = 0; i < new_size; i++)
+	{
+		table[i] = NULL;
+	}
+
+	for (int i = 0; i < old_size; i++)
+	{
+		List* testlist = new_table[i];
+		while (testlist)
+		{
+			this->set(testlist->Getkey(), testlist->data->GetValue());
+			testlist = testlist->next;
+		}
+	}
+	size = new_size;
+
+	for (int i = 0; i < old_size; i++)
+	{
+		delete(new_table[i]);
+	}
+	delete(new_table);
 }
