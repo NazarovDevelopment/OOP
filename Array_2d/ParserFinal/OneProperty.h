@@ -40,8 +40,8 @@ OneProperty::OneProperty()
 
 OneProperty::OneProperty(void* PutValue, int size)
 {
-	value = new char[strlen((char*)PutValue)+1];
-	memcpy(value, PutValue, sizeof(char)*strlen((char*)PutValue)+1);
+	value = new char[size+1];
+	memcpy(value, PutValue, sizeof(char)*(size+1));
 	//value = PutValue;
 }
 

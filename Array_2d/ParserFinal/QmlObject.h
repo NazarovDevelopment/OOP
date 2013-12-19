@@ -1,9 +1,12 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include "HashTable.h"
+#include <iostream>
 
+#include "HashTable.h"
+#include "Parser.h"
 using namespace std;
+
 
 class QmlObject : public HashTable
 {
@@ -16,7 +19,7 @@ public:
 
 public:
 
-	void Parse(const string &FileName);
+	void Parse(ifstream &file);
 
 private:
 	char* ValidPropertiesString;
@@ -49,107 +52,85 @@ int Miss_All_Space(char* buffer, int* real_number)
 
 	while (buffer[i + 1] == ' ')
 		i++;
-	*real_number = i++;
+	*real_number = i+1;
 	return i++;
 }
 
-void QmlObject::Parse(const string &FileName)
+void QmlObject::Parse(ifstream &file)
 {
 	char* buffer = new char[0x100];
 	char* name = new char[20];
 	char* value = new char[20];
 	char* _name = new char[20];
+
+	fstream::pos_type PrevPos;
+	fstream::pos_type NewPos;
+
 	
 	bool flag_name = 0;
 	bool flag_value = 0;
 	int i = 0;
 	int j = 0;
 	
-	ifstream file(FileName);
-	if (!file.is_open())
-		return;
 	
 	while (!file.eof()) {
 		file.getline(buffer, 0x100 * sizeof(char), '\n');
+		PrevPos = file.tellg();
 		Miss_All_Space(buffer, &i);
-		if (buffer[i] == '{')
+		if (buffer[i] = '\0')
 		{
-			i++;
-			Miss_All_Space(buffer,&i);
+			cout << endl << "Line is Empty" << endl;
 			i = 0;
 			continue;
 		}
 
 		if (buffer[i] == '}')
 		{
-				printf("\nEND OF FILE\n");
-				break;
+			return;
 		}
-
-  		while (!isspace(buffer[i]))
+		if (buffer[i] != ' ')
 		{
-			if (buffer[i] != ':')
+			while (!isspace(buffer[i]))
 			{
 				name[j++] = buffer[i++];
 			}
-			else
-			{
-				name[j] = '\0';
-				break;
-			}
-		}
-
-		Miss_All_Space(buffer, &i);
-		
-		if (buffer[i] == ':')
-		{
+			name[j] = '\0';
 			flag_name = 1;
-			i++;
+
 			Miss_All_Space(buffer, &i);
-		}
-		else
-		{
-			
-			printf("\n This file contain ERROR\n");
-			delete(buffer);
-			delete(name);
-			delete(_name);
-			delete(value);
-			return;
-		}
-		
-		if (flag_name && strstr(ValidPropertiesString, name))
-		{
-			Miss_All_Space(buffer, &i);
-			j = 0;
-			Miss_All_Space(buffer, &i);
-			i++;
-			while (1)
+			if (buffer[i] != ':')
 			{
-				if (!isspace(buffer[i]) && buffer[i]!='\0' && buffer[i] != '\n')
+				NewPos = PrevPos;
+				Miss_All_Space(buffer, &i);
+				if (buffer[i] == '\0')
+				{
+					i = 0;
+					continue;
+				}
+				if (buffer[i] == '{')
+				{
+					file.seekg(PrevPos);
+					Parser::Parse(file);
+					i = 0;
+					j = 0;
+					continue;
+				}
+			}
+			if (buffer[i] == ':' && flag_name && strstr(ValidPropertiesString, name))
+			{
+				j = 0;
+				while (!isspace(buffer[i]))
 				{
 					value[j++] = buffer[i++];
 				}
-				else
-				{
-  					break;
-				}
+				value[j] = '\0';
+				set(name, value, strlen(value));
 			}
 			
-			value[j] = '\0';
-			flag_value = 1;
+		
 		}
-
-		if (flag_name && flag_value && name && value)
-		{
-			this->set(name, value, sizeof(char)*strlen(value));
-		}
-		else
-		{
-			printf("ERROR");
-		}
-
 		i = j = 0;
+
 	}
 	delete(buffer);
 	delete(name);
