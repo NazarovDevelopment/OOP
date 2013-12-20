@@ -75,7 +75,14 @@
     <ClInclude Include="TextInput.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Factory.cpp" />
+    <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OneProperty.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="QmlObject.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

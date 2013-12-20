@@ -1,26 +1,23 @@
-#pragma once
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
 #include "QmlObject.h"
 
 using namespace std;
 
-class Rectangle: public QmlObject 
-{
+class QmlObject;
 
+class Rectangle : public QmlObject
+{
 public:
 
 
-	Rectangle(int Size = 5, HashFunction hfunc = NULL,
-		char* ValidProperty = "_id_x_y_width_height_color_canBeFocused_", 
-		void (*Pressed)(int key) = NULL)
-		: QmlObject(Size, hfunc, ValidProperty)
-	{
-		KeyPressed = Pressed;
-	}
-
+	Rectangle(void(*Pressed)(int key));
+	
 	void(*KeyPressed)(int key);
-
 	int ChildNumbers;
 	void* Childs[100];
 	void* Parent;
 };
 
+#endif
