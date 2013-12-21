@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class QmlObject;
+
 
 class Rectangle : public QmlObject
 {
@@ -13,11 +13,14 @@ public:
 
 
 	Rectangle(void(*Pressed)(int key));
-	
+	~Rectangle()
+	{
+
+	}
+
 	void(*KeyPressed)(int key);
-	int ChildNumbers;
-	void* Childs[100];
-	void* Parent;
+	
 };
+
 
 #endif

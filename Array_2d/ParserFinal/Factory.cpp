@@ -5,9 +5,10 @@ enum form { Rect = 1, txt = 2, intxt = 3 };
 Factory::Factory()
 {
 	Numbers = 0;
+	AllObject = new void*[0x100];
 }
 
-QmlObject* Factory::CreateNewObject(string &Type)
+void* Factory::CreateNewObject(string &Type)
 {
 	int choose = 0;
 	if (Type == "Rect")
@@ -27,9 +28,8 @@ QmlObject* Factory::CreateNewObject(string &Type)
 	{
 	case Rect:
 	{
-				 Numbers++;
 				 AllObject[Numbers] = new Rectangle(NULL);
-				 return AllObject[Numbers];
+				 return AllObject[Numbers++];
 	}
 	case txt:
 	{
@@ -46,4 +46,14 @@ QmlObject* Factory::CreateNewObject(string &Type)
 				return NULL;
 	}
 	}
+}
+
+void Factory::delete_All_Objects()
+{
+	for (int i = 0; i < Numbers; i++)
+	{
+		delete (QmlObject*)AllObject[i];
+	}
+
+	delete AllObject;
 }

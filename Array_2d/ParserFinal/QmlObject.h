@@ -6,10 +6,6 @@
 #include <iostream>
 
 #include "HashTable.h"
-#include "Parser.h"
-#include "Factory.h" 
-
-using namespace std;
 
 class QmlObject : public HashTable
 {
@@ -21,10 +17,15 @@ public:
 	~QmlObject();
 
 public:
-
+	
+	void AddChild(QmlObject* NextChild);
+	void AddParent(QmlObject* NewParent);
 	void Parse(ifstream &file);
 
 private:
+	int ChildNumbers;
+	void* Childs[100];
+	void* Parent;
 	char* ValidPropertiesString;
 };
 

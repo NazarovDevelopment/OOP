@@ -9,17 +9,19 @@
 
 using namespace std;
 
+static int Numbers = 0;
+static void** AllObject;
 
 class Factory
 {
 public:
 
-	Factory();
+	Factory(void);
 
-	static class QmlObject* CreateNewObject(string &Type);
-
-	static int Numbers;
-	static class QmlObject* AllObject[256];
+	static void* CreateNewObject(string &Type);
+	static void delete_All_Objects();
+	/*static int Numbers;
+	static void** AllObject;*/
 };
 
 #endif

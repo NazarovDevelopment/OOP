@@ -1,11 +1,12 @@
 #include "QmlObject.h"
+#include "Parser.h"
 
 
 
 
-QmlObject::QmlObject(size_t ArraySize) :HashTable(ArraySize)
+QmlObject::QmlObject() :HashTable(5)
 {
-	ValidPropertiesString = "_type_id_";
+	ValidPropertiesString = "_id_x_y_color_width_height_";
 }
 QmlObject::QmlObject(size_t ArraySize, HashFunction hfunc) : HashTable(ArraySize, hfunc)
 {
@@ -19,6 +20,18 @@ QmlObject::~QmlObject()
 {
 
 }
+
+void QmlObject::AddChild(QmlObject* NextChild)
+{
+	Childs[ChildNumbers] = NextChild;
+	ChildNumbers++;
+}
+
+void QmlObject::AddParent(QmlObject* NewParent)
+{
+	Parent = NewParent;
+}
+
 int Miss_All_Space(char* buffer, int* real_number)
 {
 	int i = *real_number;
@@ -28,7 +41,7 @@ int Miss_All_Space(char* buffer, int* real_number)
 		return i;
 	}
 
-	while (buffer[i + 1] == ' ')
+	while (buffer[i + 1] == ' ' || buffer[i + 1] == '\t')
 		i++;
 	*real_number = i + 1;
 	return i++;
@@ -36,7 +49,7 @@ int Miss_All_Space(char* buffer, int* real_number)
 
 void QmlObject::Parse(ifstream &file)
 {
-	char* buffer = new char[0x100];
+ 	char* buffer = new char[0x100];
 	char* name = new char[20];
 	char* value = new char[20];
 	char* _name = new char[20];
@@ -51,27 +64,42 @@ void QmlObject::Parse(ifstream &file)
 
 
 
-	while (!file.eof()) {
-		file.getline(buffer, 0x100 * sizeof(char), '\n');
+ 	while (!file.eof()) {
 		PrevPos = file.tellg();
+		file.getline(buffer, 0x100 * sizeof(char), '\n');
 		Miss_All_Space(buffer, &i);
-		if (buffer[i] = '\0')
+		if (buffer[i] == '\0')
 		{
 			cout << endl << "Line is Empty" << endl;
 			i = 0;
 			continue;
 		}
 
+		if (buffer[i] == '{')
+		{
+			file.seekg(NewPos);
+			Parser::Parse(file, this);
+			i = 0;
+			j = 0;
+			continue;
+		}
+
 		if (buffer[i] == '}')
 		{
+			delete(buffer);
+			delete(_name);
+			delete(name);
+			delete(value);
 			return;
 		}
+
 		if (buffer[i] != ' ')
 		{
-			while (!isspace(buffer[i]))
+			while (!isspace(buffer[i]) && buffer[i] != '\0')
 			{
 				name[j++] = buffer[i++];
 			}
+
 			name[j] = '\0';
 			flag_name = 1;
 
@@ -88,7 +116,7 @@ void QmlObject::Parse(ifstream &file)
 				if (buffer[i] == '{')
 				{
 					file.seekg(PrevPos);
-					Parser::Parse(file);
+					Parser::Parse(file, this);
 					i = 0;
 					j = 0;
 					continue;
@@ -96,8 +124,10 @@ void QmlObject::Parse(ifstream &file)
 			}
 			if (buffer[i] == ':' && flag_name && strstr(ValidPropertiesString, name))
 			{
+				i++;
 				j = 0;
-				while (!isspace(buffer[i]))
+				Miss_All_Space(buffer, &i);
+				while (!isspace(buffer[i]) && buffer[i]!= '\0')
 				{
 					value[j++] = buffer[i++];
 				}
@@ -111,8 +141,8 @@ void QmlObject::Parse(ifstream &file)
 
 	}
 	delete(buffer);
+	delete(_name);	
 	delete(name);
-	delete(_name);
 	delete(value);
 
 }
