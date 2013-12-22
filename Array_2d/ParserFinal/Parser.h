@@ -18,7 +18,4 @@ private:
 
 int Miss_All_Space(char* buffer, int* i);
 
-
-int Char_To_int(char* string);
-
 #endif

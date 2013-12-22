@@ -2,10 +2,13 @@
 
 enum form { Rect = 1, txt = 2, intxt = 3 };
 
+int Numbers;
+QmlObject** AllObject;
+
 Factory::Factory()
 {
 	Numbers = 0;
-	AllObject = new void*[0x100];
+	AllObject = new QmlObject*[0x100];
 }
 
 void* Factory::CreateNewObject(string &Type)

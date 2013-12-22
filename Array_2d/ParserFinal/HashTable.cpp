@@ -54,28 +54,7 @@ HashTable::~HashTable()
 
 	delete(table);
 }
-
-void HashTable::set(char* Putkey, void* Putvalue, int size)
-{
-	int index = hf(Putkey) % hashsize;
-	List* buffer = table[index];
-
-	while (buffer != NULL)
-	{
-		if (strcmp(buffer->Getkey(), Putkey) == 0)
-		{
-			delete(buffer->data);
-			buffer->SetData(Putvalue, size);
-			return;
-		}
-		buffer = buffer->next;
-	}
-	List* new_list = new List(Putkey, Putvalue, size);
-	new_list->next = table[index];
-	table[index] = new_list;
-	//table[index] = table[index]->prepend(Putkey, Putvalue);
-}
-
+/*
 void* HashTable::get(char* Putkey)
 {
 	int index = hf(Putkey) % hashsize;
@@ -84,13 +63,13 @@ void* HashTable::get(char* Putkey)
 	{
 		if (strcmp(buf->Getkey(), Putkey) == 0)
 		{
-			return buf->data->GetValue();
+			return  buf->data->GetValue();
 		}
 		buf = buf->next;
 	}
 	return NULL;
 }
-
+*/
 bool HashTable::has(char* Putkey)
 {
 	int index = hf(Putkey) % hashsize;
@@ -112,32 +91,32 @@ void HashTable::traverse(void(*f)(char *Putkey, void* Putvalue))
 	}
 }
 
-void HashTable::resize(int new_size)
-{
-	List** new_table = table;
-	int old_size = hashsize;
-	hashsize = new_size;
-
-	table = new List*[new_size];
-	for (int i = 0; i < new_size; i++)
-	{
-		table[i] = NULL;
-	}
-
-	for (int i = 0; i < old_size; i++)
-	{
-		List* testlist = new_table[i];
-		while (testlist)
-		{
-			this->set(testlist->Getkey(), testlist->data->GetValue(), sizeof(testlist->data->GetValue()));
-			testlist = testlist->next;
-		}
-	}
-	hashsize = new_size;
-
-	for (int i = 0; i < old_size; i++)
-	{
-		delete(new_table[i]);
-	}
-	delete(new_table);
-}
+//void HashTable::resize(int new_size)
+//{
+//	List** new_table = table;
+//	int old_size = hashsize;
+//	hashsize = new_size;
+//
+//	table = new List*[new_size];
+//	for (int i = 0; i < new_size; i++)
+//	{
+//		table[i] = NULL;
+//	}
+//
+//	for (int i = 0; i < old_size; i++)
+//	{
+//		List* testlist = new_table[i];
+//		while (testlist)
+//		{
+//			this->set(testlist->Getkey(), testlist->data->GetValue());
+//			testlist = testlist->next;
+//		}
+//	}
+//	hashsize = new_size;
+//
+//	for (int i = 0; i < old_size; i++)
+//	{
+//		delete(new_table[i]);
+//	}
+//	delete(new_table);
+//}

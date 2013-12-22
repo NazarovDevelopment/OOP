@@ -22,6 +22,8 @@ public:
 	void AddParent(QmlObject* NewParent);
 	void Parse(ifstream &file);
 
+	virtual void draw();
+
 private:
 	int ChildNumbers;
 	void* Childs[100];

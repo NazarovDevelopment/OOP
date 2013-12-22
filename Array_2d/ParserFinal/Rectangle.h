@@ -10,11 +10,13 @@ using namespace std;
 class Rectangle : public QmlObject
 {
 public:
-
-
+	
 	Rectangle(void(*Pressed)(int key));
-	~Rectangle()
+	~Rectangle();
+
+	void draw()
 	{
+
 
 	}
 

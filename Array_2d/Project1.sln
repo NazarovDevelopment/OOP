@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parser", "Parser\Parser.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParserFinal", "ParserFinal\ParserFinal.vcxproj", "{BF494A56-E1CE-4100-B637-901B20B9AD1D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dx", "dx\dx.vcxproj", "{FBBCBE88-02A8-4AD9-841A-96EB55A10200}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -63,6 +65,10 @@ Global
 		{BF494A56-E1CE-4100-B637-901B20B9AD1D}.Debug|Win32.Build.0 = Debug|Win32
 		{BF494A56-E1CE-4100-B637-901B20B9AD1D}.Release|Win32.ActiveCfg = Release|Win32
 		{BF494A56-E1CE-4100-B637-901B20B9AD1D}.Release|Win32.Build.0 = Release|Win32
+		{FBBCBE88-02A8-4AD9-841A-96EB55A10200}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FBBCBE88-02A8-4AD9-841A-96EB55A10200}.Debug|Win32.Build.0 = Debug|Win32
+		{FBBCBE88-02A8-4AD9-841A-96EB55A10200}.Release|Win32.ActiveCfg = Release|Win32
+		{FBBCBE88-02A8-4AD9-841A-96EB55A10200}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,7 @@
 #include "QmlObject.h"
 #include "Parser.h"
 
-
+#define rangeCheck(x, a, b) (x >= a && x <= b)
 
 
 QmlObject::QmlObject() :HashTable(5)
@@ -47,12 +47,62 @@ int Miss_All_Space(char* buffer, int* real_number)
 	return i++;
 }
 
+int Char_To_int(char* string)
+{
+	int Value = 0;
+	int len = strlen(string);
+
+	for (int i = 0; i < len; i++)
+	{
+		switch (string[i])
+		{
+		case '0':
+			continue;
+		case '1':
+			Value = Value + 1 * pow(10, len - i - 1);
+			break;
+		case '2':
+			Value = Value + 2 * pow(10, len - i - 1);
+			break;
+		case '3':
+			Value = Value + 3 * pow(10, len - i - 1);
+			break;
+		case '4':
+			Value = Value + 4 * pow(10, len - i - 1);
+			break;
+		case '5':
+			Value = Value + 5 * pow(10, len - i - 1);
+			break;
+		case '6':
+			Value = Value + 6 * pow(10, len - i - 1);
+			break;
+		case '7':
+			Value = Value + 7 * pow(10, len - i - 1);
+			break;
+		case '8':
+			Value = Value + 8 * pow(10, len - i - 1);
+			break;
+		case '9':
+			Value = Value + 9 * pow(10, len - i - 1);
+			break;
+
+		default:
+			cout << "ERROR" << endl;
+			return 0;
+		}
+	}
+
+	return Value;
+}
+
+
 void QmlObject::Parse(ifstream &file)
 {
  	char* buffer = new char[0x100];
 	char* name = new char[20];
-	char* value = new char[20];
 	char* _name = new char[20];
+	char* value = new char[20];
+	char* _value = new char[20];
 
 	fstream::pos_type PrevPos;
 	fstream::pos_type NewPos;
@@ -90,6 +140,7 @@ void QmlObject::Parse(ifstream &file)
 			delete(_name);
 			delete(name);
 			delete(value);
+			delete(_value);
 			return;
 		}
 
@@ -132,7 +183,23 @@ void QmlObject::Parse(ifstream &file)
 					value[j++] = buffer[i++];
 				}
 				value[j] = '\0';
-				set(name, value, strlen(value));
+
+				if (value[0] == '\"' && value[strlen(value)-1] == '\"')
+				{
+					int k = 1;
+					j = 0;
+					while (value[k] != '\"')
+					{
+						_value[j++] = value[k++];
+					}
+					_value[j] = '\0';
+					set(name, _value);
+				}
+				else
+				{
+					int INTvalue = Char_To_int(value);
+					set(name,  INTvalue);
+				}
 			}
 
 
@@ -144,5 +211,6 @@ void QmlObject::Parse(ifstream &file)
 	delete(_name);	
 	delete(name);
 	delete(value);
+	delete(_value);
 
 }

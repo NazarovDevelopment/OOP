@@ -15,16 +15,24 @@ class List
 {
 public:
 	List();
-	List(char* Putkey, void* Putdata, int size);
+	List(char* Putkey, const int &PutValue);
+	List(char* Putkey, const string &PutValue);
+
 	~List();
 
 public:
 	void draw();
 	void SetNext(List* pList);
-	void SetData(void* value, int size);
+
+	void SetData(const int &value);
+	void SetData(const string &value);
+	void SetData(const IDataWrapper &wrapper);
+
 	void foreach(void(*f)(char *key, void* data));
 
-	List* prepend(char* key, void* Putdata, int size);
+	List* prepend(char* key, const string &value);
+	List* prepend(char* key, const int &value);
+
 
 	char* Getkey();
 	bool has(char* key);

@@ -9,8 +9,8 @@
 
 using namespace std;
 
-static int Numbers = 0;
-static void** AllObject;
+extern int Numbers;
+extern QmlObject** AllObject;
 
 class Factory
 {
