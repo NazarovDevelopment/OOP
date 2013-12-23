@@ -68,7 +68,7 @@
     <ClCompile Include="console.c" />
     <ClCompile Include="example.c" />
     <ClCompile Include="List.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conlib.h" />
