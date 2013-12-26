@@ -2,7 +2,7 @@
 #define mText_H
 
 #include "QmlObject.h"
-
+#include <SFML\Graphics.hpp>
 using namespace std;
 
 
@@ -11,12 +11,16 @@ class mText : public QmlObject
 {
 public:
 
-	mText(void(*Pressed)(int key));
+	mText();
 	~mText();
 
 	void draw(sf::RenderWindow* App);
 
-	void(*KeyPressed)(int key);
+	bool KeyPressed()
+	{
+		return 1;
+	}
+
 
 };
 

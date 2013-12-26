@@ -6,7 +6,7 @@
 
 QmlObject::QmlObject() :HashTable(5)
 {
-	ValidPropertiesString = "_id_x_y_color_width_height_";
+	ValidPropertiesString = "_id_x_y_color_width_height_onkeypressed_canbefocussed_text_";
 	for (int i = 0; i < 100; i++){
 		Childs[i] = NULL;
 	}
@@ -143,7 +143,7 @@ void QmlObject::Parse(ifstream &file, int count)
 			{
 				NewPos = PrevPos;
 				while (!isspace(buffer[i]) && buffer[i] != '\0' &&buffer[i] != '\n' && buffer[i] != ':' && buffer[i] != ';'
-					&& buffer[i] != '}')
+					&& buffer[i] != '{')
 				{
 					name[j++] = buffer[i++];
 				}

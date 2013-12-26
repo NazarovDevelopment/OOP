@@ -1,29 +1,55 @@
 #include "Rectangle.h"
 #include "TextInput.h"
 #include "Text.h"
-mText::mText(void(*Pressed)(int key)) : QmlObject()
+mText::mText() : QmlObject()
 {
 	type = TXT;
-	KeyPressed = Pressed;
 }
 
 void mText::draw(sf::RenderWindow* App)
 {
 	sf::Vector2f diagon(get<int>("width"), get<int>("height"));
 	sf::Vector2f pos(get<int>("x"), get<int>("y"));
-	sf::RectangleShape rect(diagon);
-	rect.setPosition(pos);
+	sf::Vector2f postxt(get<int>("x") + 5, get<int>("y") + get<int>("height") - 5);
 
+	sf::RectangleShape rect(diagon);
+
+	/*sf::Font font;
+	font.loadFromFile("arial.ttf");
+	sf::Text text("Hello", font);
+	text.setCharacterSize(15);*/
+
+
+	sf::Color chooseColor;// = sf::Color::Black;
+	string color((string)get<string>("color"));
+
+	if (color == string("blue"))
+		chooseColor = sf::Color::Blue;
+	if (color == string("black"))
+		chooseColor = sf::Color::Black;
+	if (color == string("red"))
+		chooseColor = sf::Color::Red;
+	if (color == string("green"))
+		chooseColor = sf::Color::Green;
+	if (color == string("yellow"))
+		chooseColor = sf::Color::Yellow;
+
+	rect.setPosition(pos);
+	rect.setFillColor(sf::Color(200,200,200));
+	rect.setOutlineThickness(12);
+	rect.setOutlineColor(chooseColor);
+	//	text.setPosition(postxt);
 
 	App->draw(rect);
-
+	//	App->draw(text);
 
 	for (int i = 0; i < ChildNumbers; i++)
 	{
-		switch (GetType())
+		switch (((Rectangle*)Childs[i])->GetType())
 		{
 		case RECT:
 			((Rectangle*)Childs[i])->draw(App);
+			break;
 		case TXT:
 			((mText*)Childs[i])->draw(App);
 			break;
@@ -34,4 +60,4 @@ void mText::draw(sf::RenderWindow* App)
 			break;
 		}
 	}
-}
+	}

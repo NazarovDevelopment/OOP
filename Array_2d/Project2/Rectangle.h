@@ -16,8 +16,18 @@ public:
 	~Rectangle();
 
 	void draw(sf::RenderWindow* App);
+	bool KeyPressed()
+	{
+		switch (get<int>("onkeypressed"))
+		{
+			case 1:
+				return 0;
+		default:
+		return 1;
+		}
+	}
 
-	void(*KeyPressed)(int key);
+	void FocusDraw(sf::RenderWindow* App);
 	
 };
 

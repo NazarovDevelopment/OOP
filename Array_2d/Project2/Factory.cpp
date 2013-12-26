@@ -4,6 +4,7 @@ enum form { Rect = 1, txt = 2, intxt = 3 };
 
 int Numbers;
 QmlObject** AllObject;
+QmlObject* FocussedObject = NULL;
 
 Factory::Factory()
 {
@@ -36,7 +37,8 @@ void* Factory::CreateNewObject(string &Type)
 	}
 	case txt:
 	{
-				return 0;
+				AllObject[Numbers] = new mText();
+				return AllObject[Numbers++];
 	}
 	case intxt:
 	{

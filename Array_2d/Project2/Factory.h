@@ -16,6 +16,7 @@ extern int Numbers;
 extern QmlObject** AllObject;
 extern QmlObject* FocussedObject;
 
+
 class Factory
 {
 public:

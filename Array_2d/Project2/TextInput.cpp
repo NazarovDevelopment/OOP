@@ -3,10 +3,9 @@
 #include "TextInput.h"
 #include "Text.h"
 
-TextInput::TextInput(void(*Pressed)(int key)) : QmlObject()
+TextInput::TextInput() : QmlObject()
 {
 	type = TXTIN;
-	KeyPressed = Pressed;
 }
 
 void TextInput::draw(sf::RenderWindow* App)

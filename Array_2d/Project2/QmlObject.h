@@ -28,12 +28,15 @@ public:
 	{
 		return type;
 	}
+
+
+	int ChildNumbers;
+	QmlObject* Childs[100];
+	QmlObject* Parent;
 protected:
 	
 	TYPE type;
-	int ChildNumbers;
-	QmlObject* Childs[100];
-	void* Parent;
+	
 	char* ValidPropertiesString;
 };
 

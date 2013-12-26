@@ -4,7 +4,7 @@
 
 #include <SFML\Graphics.hpp>
 #include <SFML\System.hpp>
-
+#include "Factory.h"
 Rectangle::Rectangle() : QmlObject()
 {
 	type = RECT;
@@ -15,16 +15,7 @@ void Rectangle::draw(sf::RenderWindow* App)
 {
 	sf::Vector2f diagon(get<int>("width"), get<int>("height"));
 	sf::Vector2f pos(get<int>("x"), get<int>("y"));
-	sf::Vector2f postxt(get<int>("x") + 5, get<int>("y") + get<int>("height") - 5);
-
 	sf::RectangleShape rect(diagon);
-	
-	/*sf::Font font;
-	font.loadFromFile("arial.ttf");
-	sf::Text text("Hello", font);
-	text.setCharacterSize(15);*/
-
-
 	sf::Color chooseColor;// = sf::Color::Black;
 	string color((string)get<string>("color"));
 	
@@ -40,13 +31,30 @@ void Rectangle::draw(sf::RenderWindow* App)
 		chooseColor = sf::Color::Yellow;
 
 	rect.setPosition(pos);
+	if (FocussedObject == this)
+	{
+		rect.setOutlineColor(sf::Color::Magenta);
+	}
+	else
+	{
+		rect.setOutlineColor(chooseColor);
+	}
+
+	rect.setOutlineThickness(2);
 	rect.setFillColor(chooseColor);
-	rect.setOutlineThickness(12);
-	rect.setOutlineColor(sf::Color::Black);
-//	text.setPosition(postxt);
 
 	App->draw(rect);
-//	App->draw(text);
+	
+	if (has("text")){
+		sf::Vector2f postxt(get<int>("x") + 5, get<int>("y") + 5);
+		sf::Font font;
+		font.loadFromFile("arial.ttf");
+		sf::Text text(get<string>("text"), font);
+		text.setCharacterSize(15);
+		text.setPosition(postxt);
+		App->draw(text);
+	}
+
 
 	for (int i = 0; i < ChildNumbers; i++)
 	{
