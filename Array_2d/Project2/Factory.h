@@ -5,12 +5,16 @@
 #include <iostream>
 
 #include "Rectangle.h"
+#include "Text.h"
+#include "TextInput.h"
+
 #include "QmlObject.h"
 
 using namespace std;
 
 extern int Numbers;
 extern QmlObject** AllObject;
+extern QmlObject* FocussedObject;
 
 class Factory
 {

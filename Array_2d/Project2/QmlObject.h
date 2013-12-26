@@ -5,7 +5,10 @@
 #include <fstream>
 #include <iostream>
 
+#include <SFML\Graphics.hpp>
 #include "HashTable.h"
+
+typedef enum _TypeObject {RECT = 1, TXT = 2, TXTIN = 3} TYPE ;
 
 class QmlObject : public HashTable
 {
@@ -20,16 +23,16 @@ public:
 	
 	void AddChild(QmlObject* NextChild);
 	void AddParent(QmlObject* NewParent);
-	void Parse(ifstream &file);
-
-	void draw()
+	void Parse(ifstream &file, int count);
+	TYPE GetType()
 	{
-		cout << "draw qmlobject" << endl;
+		return type;
 	}
-
-private:
+protected:
+	
+	TYPE type;
 	int ChildNumbers;
-	void* Childs[100];
+	QmlObject* Childs[100];
 	void* Parent;
 	char* ValidPropertiesString;
 };

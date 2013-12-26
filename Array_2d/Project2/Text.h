@@ -1,5 +1,5 @@
-#ifndef TEXT_H
-#define TEXT_H
+#ifndef mText_H
+#define mText_H
 
 #include "QmlObject.h"
 
@@ -7,18 +7,14 @@ using namespace std;
 
 
 
-class Text : public QmlObject
+class mText : public QmlObject
 {
 public:
 
-	Text(void(*Pressed)(int key));
-	~Text();
+	mText(void(*Pressed)(int key));
+	~mText();
 
-	void draw()
-	{
-
-
-	}
+	void draw(sf::RenderWindow* App);
 
 	void(*KeyPressed)(int key);
 

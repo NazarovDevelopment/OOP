@@ -68,7 +68,7 @@ public:
 	//void SetValue(_T &data);
 	IDataWrapper* GetValue();
 
-	
+
 private:
 	IDataWrapper* value;
 };

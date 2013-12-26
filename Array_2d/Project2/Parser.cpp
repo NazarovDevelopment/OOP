@@ -10,28 +10,30 @@ void Parser::Parse(ifstream &file, QmlObject* MainObject)
 	
 	int index = 0;
 	int i = 0, j = 0;
-	bool FlagType = 0;
+	bool FlagType = false;
 
 	ifstream::pos_type NowPos;
+
+	NowPos = file.tellg();
+	file.getline(buffer, 256, '\n');
+	Miss_All_Space(buffer, &i);
 
 	while (!file.eof())
 	{
 		j = i = index = 0;
-	
-		NowPos = file.tellg();
-		file.getline(buffer, 256, '\n');
 		Miss_All_Space(buffer, &i);
 
-		if (buffer[i] == '\n')
+		if (buffer[i] == '\0')
 			continue;
 
-		if (isspace(buffer[i]) && buffer[i] != '\n')
+		if (!isspace(buffer[i]) && buffer[i] != '\n'&& buffer[i] != '\0' && !FlagType)
 		{
-			while (isspace(buffer[i]) && buffer[i] != '\n')
+			while (!isspace(buffer[i]) && buffer[i] != '\n' && buffer[i] != '\0'&& buffer[i] != '{')
 			{
 				name[j++] = buffer[i++];
 			}
 			name[j] = '\0';
+			FlagType = true;
 		}
 
 		Miss_All_Space(buffer, &i);
@@ -40,6 +42,7 @@ void Parser::Parse(ifstream &file, QmlObject* MainObject)
 		{
 			if (buffer[i] == '{')
 			{
+				FlagType = false;
 				Miss_All_Space(buffer, &i);
 				while (true)
 				{
@@ -52,26 +55,37 @@ void Parser::Parse(ifstream &file, QmlObject* MainObject)
 						MainObject->AddChild(new_Qmlobject);
 					}
 					Miss_All_Space(buffer, &i);
-					if (buffer[i] != '\0')
+					
+					i++;
+					Miss_All_Space(buffer, &i);
+					if (buffer[i] != '\0'  )
 					{
 						file.seekg(NowPos);
-						QmlObject* new_Qmlobject;
-						new_Qmlobject = (QmlObject*) Factory::CreateNewObject((string)name);
-							
-						new_Qmlobject->AddParent(MainObject);
-						if (MainObject != 0)
-							{
-									MainObject->AddChild(new_Qmlobject);
-							}
 						new_Qmlobject->Parse(file, i);
-						FlagType = false;
-						i = 0; j = 0; continue;
+						delete(name);
+						delete(buffer);
+						delete(type);
+						return;
 					}
 					else
 					{
-
+						new_Qmlobject->Parse(file, 0);
+						delete(name);
+						delete(buffer);
+						delete(type);
+						return;
 					}
+						FlagType = false;
+						i = 0; j = 0; continue;
 				}
+			}
+			else
+			{
+				NowPos = file.tellg();
+				file.getline(buffer, 256, '\n');
+				i = 0; j = 0;
+				Miss_All_Space(buffer, &i);
+				continue;
 			}
 		}
 

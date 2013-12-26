@@ -1,5 +1,5 @@
-#ifndef TEXTINPUT_H
-#define TEXTINPUT_H
+#ifndef TextInput_H
+#define TextInput_H
 
 #include "QmlObject.h"
 
@@ -12,11 +12,7 @@ public:
 	TextInput(void(*Pressed)(int key));
 	~TextInput();
 
-	void draw()
-	{
-
-
-	}
+	void draw(sf::RenderWindow* App);
 
 	void(*KeyPressed)(int key);
 

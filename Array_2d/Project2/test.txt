@@ -1,10 +1,24 @@
-Rect_Base
+Rect 
 {
- id   : "Base"
-	Rect_Small
-	{
-	id : "sma"
-	x : 222 
-	}
-
-}
+ 	id 
+: 
+"base"; 
+x
+:
+50; 
+	y
+:
+50;
+	Rect
+ {
+ id
+:
+"base"
+;
+ x
+:
+200
+;
+ y:200; width:50; height:50; color:"red"}
+	Rect { id:"base" ; x:400; y:200;width:50;height:50;color:"black"}
+width:50;height:50;color: "green"}

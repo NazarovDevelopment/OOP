@@ -31,7 +31,7 @@ void* Factory::CreateNewObject(string &Type)
 	{
 	case Rect:
 	{
-				 AllObject[Numbers] = new Rectangle(NULL);
+				 AllObject[Numbers] = new Rectangle();
 				 return AllObject[Numbers++];
 	}
 	case txt:

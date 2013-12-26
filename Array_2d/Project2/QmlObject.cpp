@@ -7,14 +7,23 @@
 QmlObject::QmlObject() :HashTable(5)
 {
 	ValidPropertiesString = "_id_x_y_color_width_height_";
+	for (int i = 0; i < 100; i++){
+		Childs[i] = NULL;
+	}
 }
 QmlObject::QmlObject(size_t ArraySize, HashFunction hfunc) : HashTable(ArraySize, hfunc)
 {
 	ValidPropertiesString = "_type_id_";
+	for (int i =0 ; i < 100; i++){
+		Childs[i] = NULL;
+	}
 }
 QmlObject::QmlObject(size_t ArraySize, HashFunction hfunc, char* ValidString) : HashTable(ArraySize, hfunc)
 {
 	ValidPropertiesString = ValidString;
+	for (int i =0 ; i < 100; i++){
+		Childs[i] = NULL;
+	}
 }
 QmlObject::~QmlObject()
 {
@@ -57,7 +66,7 @@ int Char_To_int(char* string)
 		switch (string[i])
 		{
 		case '0':
-			continue;
+			break;;
 		case '1':
 			Value = Value + 1 * pow(10, len - i - 1);
 			break;
@@ -95,10 +104,9 @@ int Char_To_int(char* string)
 	return Value;
 }
 
-
-void QmlObject::Parse(ifstream &file)
+void QmlObject::Parse(ifstream &file, int count)
 {
- 	char* buffer = new char[0x100];
+  	char* buffer = new char[0x100];
 	char* name = new char[20];
 	char* _name = new char[20];
 	char* value = new char[20];
@@ -107,14 +115,148 @@ void QmlObject::Parse(ifstream &file)
 	fstream::pos_type PrevPos;
 	fstream::pos_type NewPos;
 
-	bool flag_name = 0;
-	bool flag_value = 0;
-	int i = 0;
+	bool flag_name  = false;
+	bool flag_value = false;
+	int i = count;
 	int j = 0;
 
+	PrevPos = file.tellg();
+	file.getline(buffer, 256, '\n');
+	Miss_All_Space(buffer, &i);
 
+		while (true)
+		{
+			Miss_All_Space(buffer, &i);
 
- 	while (!file.eof()) {
+			if (buffer[i] == '}')
+			{
+				delete(buffer);
+				delete(_name);
+				delete(name);
+				delete(value);
+				delete(_value);
+				return;
+			}
+
+			if (!isspace(buffer[i]) && buffer[i] != '\0' && buffer[i] != '\n' && buffer[i] != ';'&& buffer[i] != ':'
+				&& !flag_name && !flag_value)
+			{
+				NewPos = PrevPos;
+				while (!isspace(buffer[i]) && buffer[i] != '\0' &&buffer[i] != '\n' && buffer[i] != ':' && buffer[i] != ';'
+					&& buffer[i] != '}')
+				{
+					name[j++] = buffer[i++];
+				}
+				name[j] = '\0';
+				j = 0;
+				flag_name = true;
+			}
+			
+ 			Miss_All_Space(buffer, &i);
+			if (buffer[i] == '\0')
+			{
+				PrevPos = file.tellg();
+				file.getline(buffer, 256, '\n');
+				i = j = 0;
+				continue;
+			}
+
+			if (!flag_name && !flag_value && buffer[i] == ';')
+			{
+
+				PrevPos = file.tellg();
+				file.getline(buffer, 256, '\n');
+				i = j = 0;
+				continue;
+			}
+			if (buffer[i] == ':')
+			{
+				flag_value = true;
+				i++;
+			}
+			if (!flag_value && flag_name && buffer[i] == ';')
+			{
+
+			}
+			Miss_All_Space(buffer, &i);
+			if (buffer[i] == '\0' && flag_value)
+			{
+				PrevPos = file.tellg();
+				i = j = 0;
+				file.getline(buffer, 256, '\n');
+				continue;
+			}
+
+			if (buffer[i] == '{' && flag_name && !flag_value)
+			{
+				file.seekg(NewPos);
+				Parser::Parse(file, this);
+				i = j = 0;
+				flag_name = flag_value = false;
+				PrevPos = file.tellg();
+				file.getline(buffer, 256, '\n');
+				continue;
+			}
+			
+			Miss_All_Space(buffer, &i);
+
+			if (!isspace(buffer[i]) && buffer[i] != '\0' && buffer[i] != '\n' && flag_name && flag_value)
+			{
+				while (!isspace(buffer[i]) && buffer[i] != '\0' && flag_name && buffer[i] != '\n'&& buffer[i] != ';' && buffer[i] != '}')
+				{
+					value[j++] = buffer[i++];
+				}
+   				value[j] = '\0';
+				flag_value = false;
+
+				if (strstr(ValidPropertiesString, name))
+				{
+					if (value[0] == '\"' && value[strlen(value) - 1] == '\"')
+					{
+						int k = 1;
+						j = 0;
+						while (value[k] != '\"')
+						{
+							_value[j++] = value[k++];
+						}
+						_value[j] = '\0';
+						k = j = 0;
+						set(name, _value);
+					}
+					else
+					{
+						int INTvalue = Char_To_int(value);
+						set(name, INTvalue);
+					}
+					
+					Miss_All_Space(buffer, &i);
+					if (buffer[i] == '\0')
+					{
+						i = j = 0;
+						flag_name = flag_value = false;
+						PrevPos = file.tellg();
+						file.getline(buffer, 256, '\n');
+						continue;
+					}
+					if (buffer[i] == ';')
+					{
+						j = 0;
+						flag_name = flag_value = false;
+						i++;
+						continue;
+					}
+					if (!isspace(buffer[i]) && buffer[i] != '\0' && buffer[i] != '\n')
+					{
+						j = 0;
+						flag_name = flag_value = false;
+						continue;
+					}
+				}
+			}
+			i = j = 0;
+	}
+
+ 	/*while (!file.eof()) {
 		PrevPos = file.tellg();
 		file.getline(buffer, 0x100 * sizeof(char), '\n');
 		Miss_All_Space(buffer, &i);
@@ -206,7 +348,7 @@ void QmlObject::Parse(ifstream &file)
 		}
 		i = j = 0;
 
-	}
+	}*/
 	delete(buffer);
 	delete(_name);	
 	delete(name);
