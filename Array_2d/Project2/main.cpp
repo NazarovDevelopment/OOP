@@ -22,16 +22,16 @@
 using namespace std;
 using namespace sf;
 
-bool funcPrint(sf::Keyboard Key)
-{
-	switch (Key)
-	{
-	case A:
-	case (1):
-	default:
-		break;
-	}
-}
+//bool funcPrint(sf::Keyboard Key)
+//{
+//	switch (Key)
+//	{
+//	case A:
+//	case (1):
+//	default:
+//		break;
+//	}
+//}
 
 int main()
 {

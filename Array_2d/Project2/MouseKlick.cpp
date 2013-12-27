@@ -47,7 +47,7 @@ int MouseEvent::mouseUser(int x, int y)
 						return 1;
 				}
 				switch (AllObject[i]->GetType())
-				{
+				{ 
 				case RECT:
 					return ((Rectangle*)AllObject[i])->KeyPressed();
 				case TXT:

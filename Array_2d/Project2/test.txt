@@ -5,11 +5,15 @@ onkeypressed:0
 y:2;
 Rect{
  id:"base"
-onkeypressed:1 
+onkeypressed:1
 text:"EXIT"
+canbefocused:1 
  x:200;
  y:200;
  width:50; 
 height:50; color:"red"}
-	Rect { id:"base" ; x:400; y:200;width:50;height:50;color:"black"}
-width:800;height:600;color: "green"}
+	TXT { id:"base" ; x:400; y:200;width:50;height:50;color:"black"}
+width:800;
+canbefocused:1
+height:600;
+color: "green"}
