@@ -1,3 +1,0 @@
-Rect_Base
-{
- id   : "Base";	Rect_Small { id : "sma"; x : 222 } }

@@ -1,5 +1,0 @@
-{
-id:  EXIT_BUTTON
-x: ffff
-y:sdfsdf
-}
