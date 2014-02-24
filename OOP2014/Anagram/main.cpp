@@ -130,25 +130,31 @@ void Dictionary::ReadTxtFile()
 
 void main()
 {
-	Dictionary MyDict("Dictionary.txt");
-	MyDict.ReadTxtFile();
+	fstream input;
+	input.open("Input.txt", ios::in);
+	
 
-	string AllString = "revo eey problme keew";
+	Dictionary MyDict("Dictionary.txt");
+	
+	string AllString;
+	getline(input,AllString);
 	vector<short> key = vector<short>(26);
 	vector<string> sentence(0);
 	string myword;
 
 	for (int i = 0; i < AllString.length(); i++)
 	{	
+		if (!isspace(AllString[i]))
+		{
+			if (isupper(AllString[i]))
+				AllString[i] = tolower(AllString[i]);
+			myword.push_back(AllString[i]);
+			continue;
+		}
+
 		for (int it = 0; it < 26; it++)
 		{
 			key[it] = 0;
-		}
-
-		if (!isspace(AllString[i]))
-		{
-			myword.push_back(AllString[i]);
-			continue;
 		}
 			for (int k = 0; k < myword.length(); k++)
 			{
@@ -156,6 +162,10 @@ void main()
 			}
 			sentence.push_back(MyDict.find(key));
 			myword.clear();
+	}
+	for (int it = 0; it < 26; it++)
+	{
+		key[it] = 0;
 	}
 	for (int k = 0; k < myword.length(); k++)
 	{
@@ -170,7 +180,10 @@ void main()
 	vector<string>::iterator start = sentence.begin();
 	vector<string>::iterator end = sentence.end();
 
-	copy(start, end, ostream_iterator<string>(cout, " "));
+	
+
+	sort(start, end);
+	copy(start, end, ostream_iterator<string>(cout, "  "));
 	cout << endl;
 	while (std::next_permutation(start, end))
 	{
@@ -187,7 +200,7 @@ void main()
 	}
 
 	
-	copy(start, end, ostream_iterator<string>(cout, " "));
+	
 
 	
 	cout << endl;
