@@ -72,7 +72,6 @@ void main()
 	string word = "";
 	vector<string> words;
 
-	
 	for (int i = 0; i < AllLine.length() + 1; i++){
 		if (!isspace(AllLine[i]) && !ispunct(AllLine[i]) && AllLine[i]!='\0')
 		{
