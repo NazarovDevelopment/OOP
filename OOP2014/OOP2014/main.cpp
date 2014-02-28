@@ -67,7 +67,10 @@ void IsPalindrome(Contain WordorSentence)
 
 void main()
 {
-	string AllLine = "aa oh oh aa oh oh aa";
+	fstream myfile;
+	myfile.open("input.txt", ios::in);
+	string AllLine;
+	getline(myfile, AllLine);
 	string Sentence;
 	string word = "";
 	vector<string> words;
@@ -95,10 +98,6 @@ void main()
 				word.clear();
 		}
 	}
-	
-
-
-
 
 	cout << endl << endl;
 	IsPalindrome<vector<string>>(words);
@@ -106,6 +105,5 @@ void main()
 	cout << endl << endl;
 	IsPalindrome<string>(Sentence);
 
-	
 	system("pause");
 }

@@ -131,7 +131,7 @@ void Dictionary::ReadTxtFile()
 void main()
 {
 	fstream input;
-	input.open("Input.txt", ios::in);
+	input.open("input.txt", ios::in);
 	
 
 	Dictionary MyDict("Dictionary.txt");
