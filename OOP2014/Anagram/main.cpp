@@ -7,23 +7,18 @@
 #include <algorithm>
 using namespace std;
 
+#define NumberOfLetters		26
+#define StringOfDigits		"1234567890"
+#define EnglishAlphabet		"abcdefghijklmnopqrstuvwxyz"
+
 class Word
 {
 public:
 	Word() :word(""), rank(0){}
 	Word(string newWord, short newRank) :word(newWord), rank(newRank){}
-
-	short getRank(){
-		return rank;
-	}
-
-	string getword()
-	{
-		return word;
-	}
-
+	short getRank(){return rank;}
+	string getword(){return word;}
 private:
-	
 	short rank;
 	string word;
 };
@@ -32,29 +27,29 @@ class Dictionary
 {
 public:
 	Dictionary(char* File_Name_Dict);
-
-	string find(vector<short> key)
-	{	
-		map<vector<short>, Word>::iterator iter;
-		iter = Dict.find(key);
-		if (iter == Dict.end())
-		{
-			cout << "It's Error" << endl;
-			return "ERROR";
-		}
-		Word mw = (*iter).second ;
-		return mw.getword();
-	}
+	string find(vector<short> key);
 	void ReadTxtFile();
 private:
 	map<vector<short>, Word> Dict;
 	fstream Dict_File;
 };
 
+string Dictionary::find(vector<short> key)
+
+{
+	map<vector<short>, Word>::iterator iter;
+	iter = Dict.find(key);
+	if (iter == Dict.end())
+	{
+		cout << "It's Error" << endl;
+		return "ERROR";
+	}
+	Word mw = (*iter).second;
+	return mw.getword();
+}
 
 Dictionary::Dictionary(char* File_Name_Dict) 
 {
-	char* MyLine = "";
 	Dict_File.open(File_Name_Dict, ios_base::in);
 
 	ReadTxtFile();
@@ -64,66 +59,34 @@ void Dictionary::ReadTxtFile()
 {
 	string line;
 	string word;
-	
-	vector<short> key = vector<short>(26);
-		
-	char* strRank = new char[3];
+	string rankstr;
 	short rank;
 
+	vector<short> key = vector<short>(NumberOfLetters);
+	
 	
 	while (!Dict_File.eof())
 	{
-		for (int it = 0; it < 26; it++)
-		{
-			key[it] = 0;
-		}
-
+		for_each(key.begin(), key.end(), [](short &n){ n = 0; });
 		word.clear();
 		line.clear();
-		
-		int i = 0;
-		int j = 0;
-
-
-
 		getline(Dict_File, line);
-
-
-		while (!isspace(line[i]) && !ispunct(line[i]))
-		{
-			if (isupper(line[i]))
-				line[i] = tolower(line[i]);
-			word.push_back(line[i]);
-			i++;
-		}
-
-		while (isspace(line[i]) || ispunct(line[i]))
-		{
-			i++;
-		}
-
-		while (!isspace(line[i]) && !ispunct(line[i]) && line[i] != '\0')
-		{
-			strRank[j] = line[i];
-			i++;
-			j++;
-		}
-		strRank[j] = '\0';
-
-		rank = atoi((const char*)strRank);
-
+		transform(line.begin(), line.end(), line.begin(), (int(*)(int))tolower);
+		
+		size_t count = 0;
+		size_t it = line.find_first_of(',', count);
+		word = line.substr(count, it - count);
+		
+		count = line.find_first_not_of(StringOfDigits, ++it);
+		rankstr = line.substr(it, count);
+		rank = atoi(rankstr.c_str());
+		for_each(word.begin(), word.end(), [&key](char& c){key[(short)(c - 97)] ++;});
+		
 		Word myWord(word, rank);
-
-		for (int k = 0; k < word.length(); k++)
-		{
-			key[(short)(word[k] - 97)] ++;
-		}
-
 		if (Dict[key].getRank() < rank)
-		Dict[key] = myWord;
+			Dict[key] = myWord;
 	}
 
-	delete strRank;
 }
 
 
@@ -131,92 +94,40 @@ void Dictionary::ReadTxtFile()
 void main()
 {
 	fstream input;
-	input.open("input.txt", ios::in);
-	
-
 	Dictionary MyDict("Dictionary.txt");
-	
-	string AllString;
-	getline(input,AllString);
-	vector<short> key = vector<short>(26);
+	string allString;
+	vector<short> key = vector<short>(NumberOfLetters);
 	vector<string> sentence(0);
 	string myword;
+	size_t it = 0;
+	size_t count = 0;
 
-	for (int i = 0; i < AllString.length(); i++)
-	{	
-		if (!isspace(AllString[i]))
-		{
-			if (isupper(AllString[i]))
-				AllString[i] = tolower(AllString[i]);
-			myword.push_back(AllString[i]);
-			continue;
-		}
+	input.open("input.txt", ios::in);
+	getline(input,allString);
+	transform(allString.begin(), allString.end(), allString.begin(), (int(*)(int))tolower);
 
-		for (int it = 0; it < 26; it++)
-		{
-			key[it] = 0;
-		}
-			for (int k = 0; k < myword.length(); k++)
-			{
-				key[(short)(myword[k] - 97)] ++;
-			}
-			sentence.push_back(MyDict.find(key));
-			myword.clear();
-	}
-	for (int it = 0; it < 26; it++)
-	{
-		key[it] = 0;
-	}
-	for (int k = 0; k < myword.length(); k++)
-	{
-		key[(short)(myword[k] - 97)] ++;
-	}
-
-	sentence.push_back(MyDict.find(key)); 
-
-
-	cout << endl;
+	while (true){
+		for_each(key.begin(), key.end(), [](short &n){ n = 0; });
+		size_t it = allString.find_first_not_of(EnglishAlphabet, count);
+		myword = allString.substr(count, it - count);
 		
-	vector<string>::iterator start = sentence.begin();
-	vector<string>::iterator end = sentence.end();
-
-	
-
-	sort(start, end);
-	copy(start, end, ostream_iterator<string>(cout, "  "));
-	cout << endl;
-	while (std::next_permutation(start, end))
-	{
+		for_each(myword.begin(), myword.end(), [&key](char& c){key[(short)(c - 97)] ++; });
+		sentence.push_back(MyDict.find(key));
+		count = it + 1;
 		
+		if (count == 0)
+			break;
+	}
 
-		copy(start, end, ostream_iterator<string>(cout, " "));
-		/*for (vector<string>::iterator i = sentence.begin(); i < sentence.end(); i++)
-		{
-			cout << "  " << *i << "  ";
-		}*/
-
+	sort(sentence.begin(), sentence.end());
+	for_each(sentence.begin(), sentence.end(), [](string it){cout << it << " "; });
+	cout << endl;
+	while (next_permutation(sentence.begin(), sentence.end()))
+	{
+		copy(sentence.begin(), sentence.end(), ostream_iterator<string>(cout, " "));
 		cout << endl;
-
 	}
-
-	
-	
-
-	
 	cout << endl;
-
-
-
-
-
-
-	/*for (int k = 0; k < word.length(); k++)
-	{
-		key[(short)(word[k] - 97)] ++;
-	}*/
-
-	//cout << MyDict.find(key) << endl;
 	
-
 	system("pause");
 }

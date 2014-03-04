@@ -3,107 +3,71 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
-template <typename Contain>
-void write(Contain WordorSentence)
+template <typename Contain, typename Intro>
+void draw(Contain myContain)
 {
-	Contain::iterator iter;
+	cout << endl << endl;
+	
+	for_each(myContain.begin(), myContain.end(), [](Intro it){cout << it << " "; });
+	cout << endl;
 
-	for (iter = WordorSentence.begin(); iter < WordorSentence.end(); iter++)
-	{
-		cout << *iter << " ";
-	}
+	reverse(myContain.begin(),myContain.end());
+	for_each(myContain.begin(), myContain.end(), [](Intro it){cout << it << " "; });
+	cout << endl;
+
+	if (IsPalindrome<Contain>(myContain))
+		cout << "IT IS PALINDROME" << endl;
+	else
+		cout << "IT IS NOT PALINDROME" << endl;
+
+	cout << endl;
 }
 
 template <typename Contain>
-bool check(Contain WordorSentence)
+bool IsPalindrome(Contain WordOrSentence)
 {
-	Contain::iterator BeginIterr = WordorSentence.begin();
-	Contain::iterator EndIterr = WordorSentence.end()-- --;
-	Contain::iterator CurrIterr = EndIterr;
+	Contain newContain = WordOrSentence;
+	reverse(newContain.begin(), newContain.end());
 
-	if (EndIterr == BeginIterr)
-	{
-		return 1;
-	}
 
-	for (Contain::iterator it = BeginIterr; it < EndIterr; it++)
-	{	
-		CurrIterr--;
-
-		auto ob1 = *it;
-		auto ob2 = *CurrIterr;
-
-		if (ob1 != ob2)
-		{
-			return 0;
-		}
-		if (it >= CurrIterr){
-			
-			return 1;
-		}
-	}
-}
-
-template <typename Contain>
-void IsPalindrome(Contain WordorSentence)
-{
-	write<Contain>(WordorSentence);
-	cout << endl << " Reverse:" << endl;
-	reverse(WordorSentence.begin(), WordorSentence.end());
-	write<Contain>(WordorSentence);
-	if (check<Contain>(WordorSentence))
-	{	
-		
-		
-		cout << endl << " it's Palindrome!!!" << endl << endl;
-	}
-	else{
-		cout << endl << " it's  not Palindrome!!!" << endl << endl;
-	}
+	if (WordOrSentence == newContain)
+		return true;
+	else
+		return false;
 }
 
 void main()
 {
 	fstream myfile;
-	myfile.open("input.txt", ios::in);
-	string AllLine;
-	getline(myfile, AllLine);
-	string Sentence;
+	string allLine = "";
 	string word = "";
+
+	myfile.open("input.txt", ios::in);
+	
+	getline(myfile, allLine);
+	string sentence;
 	vector<string> words;
 
-	for (int i = 0; i < AllLine.length() + 1; i++){
-		if (!isspace(AllLine[i]) && !ispunct(AllLine[i]) && AllLine[i]!='\0')
-		{
-			char c = AllLine[i];
-			if (isupper(AllLine[i]))
-				AllLine[i] = tolower(AllLine[i]);
+	transform(allLine.begin(), allLine.end(), allLine.begin(), (int(*)(int))tolower);
+	
+	size_t count = 0;
 
-			Sentence.push_back(AllLine[i]);
-			word.push_back(AllLine[i]);
-			
-		}
-		else
-		{
-			if (word != ""){
-				words.push_back(word);
-				IsPalindrome<string>(word);
-				word.clear();
-			}
-
-			if (word == "")
-				word.clear();
-		}
+	while (true){
+		size_t it = allLine.find_first_of(" ", count);
+		word = allLine.substr(count, it - count);
+		draw<string,char>(word);
+		words.push_back(word);
+		sentence = sentence + word;
+		count = it + 1;
+		if (count == 0)
+			break;
 	}
 
-	cout << endl << endl;
-	IsPalindrome<vector<string>>(words);
-	
-	cout << endl << endl;
-	IsPalindrome<string>(Sentence);
-
+	draw<vector<string>, string>(words);
+	draw<string,char>(sentence);
 	system("pause");
 }
