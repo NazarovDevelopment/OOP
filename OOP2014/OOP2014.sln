@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Anagram", "Anagram\Anagram.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scramble", "Scramble\Scramble.vcxproj", "{84C18C2A-E4FB-4462-AA1A-1D6422B5EB56}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dijkstra’s_algorithm", "Dijkstra’s_algorithm\Dijkstra’s_algorithm.vcxproj", "{A7DC1916-C0D0-479B-AAD1-895EF3248C42}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Complex", "Complex\Complex.vcxproj", "{7899176C-44EA-4661-89C7-C2BF0CA7651E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +31,14 @@ Global
 		{84C18C2A-E4FB-4462-AA1A-1D6422B5EB56}.Debug|Win32.Build.0 = Debug|Win32
 		{84C18C2A-E4FB-4462-AA1A-1D6422B5EB56}.Release|Win32.ActiveCfg = Release|Win32
 		{84C18C2A-E4FB-4462-AA1A-1D6422B5EB56}.Release|Win32.Build.0 = Release|Win32
+		{A7DC1916-C0D0-479B-AAD1-895EF3248C42}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A7DC1916-C0D0-479B-AAD1-895EF3248C42}.Debug|Win32.Build.0 = Debug|Win32
+		{A7DC1916-C0D0-479B-AAD1-895EF3248C42}.Release|Win32.ActiveCfg = Release|Win32
+		{A7DC1916-C0D0-479B-AAD1-895EF3248C42}.Release|Win32.Build.0 = Release|Win32
+		{7899176C-44EA-4661-89C7-C2BF0CA7651E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7899176C-44EA-4661-89C7-C2BF0CA7651E}.Debug|Win32.Build.0 = Debug|Win32
+		{7899176C-44EA-4661-89C7-C2BF0CA7651E}.Release|Win32.ActiveCfg = Release|Win32
+		{7899176C-44EA-4661-89C7-C2BF0CA7651E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
