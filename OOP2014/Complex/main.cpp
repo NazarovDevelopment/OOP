@@ -2,6 +2,9 @@
 #include <cstdlib>
 #include "Complex.h"
 
+#define _USE_MATH_DEFINES // for C++
+#include <cmath>
+
 using namespace std;
 
 

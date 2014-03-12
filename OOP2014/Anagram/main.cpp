@@ -35,17 +35,14 @@ private:
 };
 
 string Dictionary::find(vector<short> key)
-
 {
-	map<vector<short>, Word>::iterator iter;
-	iter = Dict.find(key);
+	map<vector<short>, Word>::iterator iter = Dict.find(key);
 	if (iter == Dict.end())
 	{
 		cout << "It's Error" << endl;
 		return "ERROR";
 	}
-	Word mw = (*iter).second;
-	return mw.getword();
+	return iter->second.getword();
 }
 
 Dictionary::Dictionary(char* File_Name_Dict) 
@@ -62,9 +59,8 @@ void Dictionary::ReadTxtFile()
 	string rankstr;
 	short rank;
 
-	vector<short> key = vector<short>(NumberOfLetters);
-	
-	
+	vector<short> key(NumberOfLetters);
+
 	while (!Dict_File.eof())
 	{
 		for_each(key.begin(), key.end(), [](short &n){ n = 0; });

@@ -52,7 +52,7 @@ void main()
 	string sentence;
 	vector<string> words;
 
-	transform(allLine.begin(), allLine.end(), allLine.begin(), (int(*)(int))tolower);
+	transform(allLine.begin(), allLine.end(), allLine.begin(), tolower);
 	
 	size_t count = 0;
 

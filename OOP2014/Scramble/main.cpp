@@ -24,7 +24,11 @@ public:
 			if (s == vcc) counter++;
 			else counter = 0;
 
-			if (counter == number){ counter = 0; outData.push_back(0); }
+			if (counter == number)
+			{
+				counter = 0;
+				outData.push_back(0);
+			}
 		});
 	}
 private:
