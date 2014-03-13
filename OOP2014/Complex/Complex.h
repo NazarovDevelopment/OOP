@@ -1,100 +1,227 @@
 #pragma once
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <regex>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+using namespace std;
+
 const double exponena = 2.7182818284590452353602874713527;
 
-
-template <typename T>
 class Complex
 {
 public:
 
-	//Constructs
+	//Constructors
 	Complex() :real_part(0), complex_part(0){}
-	Complex(T real, T comlex){ real_part = real; complex_part = comlex; }
-	Complex(Complex<T>& cmp) :real_part(cmp.real_part), complex_part(cmp.complex_part){}
+	Complex(double real, double comlex){ real_part = real; complex_part = comlex; }
+	Complex(Complex & cmp) :real_part(cmp.real_part), complex_part(cmp.complex_part){}
 
 	//Operators
-	void operator = (Complex<T> & right) {
+	Complex & operator = (const Complex & right){
+		if (this == &right)
+			return *this;
+
 		real_part = right.real_part;
 		complex_part = right.complex_part;
+		return *this;
 	}
-
-	Complex<T> operator + (const Complex<T>& right){
-		return Complex<T>(real_part + right.real_part, complex_part + right.complex_part);
+	Complex & operator = (const double & right){
+		if (this->real_part == right && this->complex_part)
+			return *this;
+		
+		real_part = right;
+		complex_part = 0;
+		return *this;
 	}
-	Complex<T> operator + (const T right){
-		return Complex<T>(real_part + right, complex_part);
+	
+	Complex operator + (const Complex & right)const{
+		return Complex(real_part + right.real_part, complex_part + right.complex_part);
 	}
-	Complex<T> operator - (const Complex<T>& right){
-		return Complex<T>(real_part - right.real_part, complex_part - right.complex_part);
+	Complex operator - (const Complex & right)const{
+		return Complex(real_part - right.real_part, complex_part - right.complex_part);
 	}
-	Complex<T> operator - (const T right){
-		return Complex<T>(real_part - right, complex_part);
-	}
-	Complex<T> operator * (const Complex<T>& right){
-		return Complex<T>(real_part*right.real_part - complex_part*right.complex_part,
+	Complex operator * (const Complex & right)const{
+		return Complex(real_part*right.real_part - complex_part*right.complex_part,
 			real_part*right.complex_part + complex_part * right.real_part);
 	}
-	Complex<T> operator * (const T right){
-		return Complex<T>(real_part*right,complex_part*right);
+	Complex operator / (const Complex & right)const{
+		return (*this)*right.MakeConjugate() / (right.real_part*right.real_part + right.complex_part*right.complex_part);
 	}
-	Complex<T> operator / (const T right){
-		return Complex<T>((T) real_part/right,(T) complex_part/right);
+
+	Complex operator + (const double & right)const{
+		return Complex(real_part + right, complex_part);
 	}
-	Complex<T> operator / (const Complex<T>& right){
-		return (*this)*right.MakeConjugate()/(right.real_part*right.real_part + right.complex_part*right.complex_part);
+	Complex operator - (const double & right)const{
+		return Complex(real_part - right, complex_part);
+	}
+	Complex operator * (const double & right)const{
+		return Complex(real_part*right,complex_part*right);
+	}
+	Complex operator / (const double & right)const{
+		return Complex((double)real_part / right, (double)complex_part / right);
+	}
+	
+	
+	Complex& operator += (const Complex & right){
+		*this = *this + right;
+		return *this;
+	}
+	Complex& operator -= (const Complex & right){
+		*this = *this - right;
+		return *this;
+	}
+	Complex& operator *= (const Complex & right){
+		*this = *this * right;
+		return *this;
+	}
+	Complex& operator /= (const Complex & right){
+		*this = *this / right;
+		return *this;
+	}
+	
+	Complex& operator += (const double & right){
+		real_part += right;
+	}
+	Complex& operator -= (const double & right){
+		*this = *this - right;
+		return *this;
+	}
+	Complex& operator *= (const double & right){
+		*this = *this * right;
+		return *this;
+	}
+	Complex& operator /= (const double & right){
+		*this = *this / right;
+		return *this;
 	}
 
 	//bool
-	bool operator == (const Complex<T>& right){
+	bool operator == (const Complex & right) const{
 		return true ? ((real_part == right.real_part) && (complex_part == right.complex_part)) : false;
 	}
-	bool operator == (const T right){
+	bool operator == (const double & right)   const{
 	
 		return true ? ((complex_part == 0) && (real_part == right)) : false;
 	}
 		
+	bool operator != (const Complex & right) const
+	{
+		return !((*this) == right);
+	}
+	bool operator != (const double & right) const
+	{
+		return !((*this) == right);
+	}
 
 	//functions 
-	Complex<double> Pow(const double right)
+	Complex Pow(const double & right) const
 	{
 		double mod = Module();
 		double arg = Argument();
-		return Complex<double>(pow(mod, right)*cos(right * arg), pow(mod, right)*sin(right * arg));
+		return Complex(pow(mod, right)*cos(right * arg), pow(mod, right)*sin(right * arg));
 		
 	}
-	Complex<T> Pow(const Complex<T>& right)
+	Complex Pow(const Complex & right) const
 	{
 		double b = Argument();
-		Complex<double> a(log(Module()), Argument());
-		Complex<T> degree = a*right;
-		return Complex<double>(pow(exponena, degree.RePart()) * cos(degree.ImPart()), pow(exponena, degree.RePart()) * sin(degree.ImPart()));
+		Complex a(log(Module()), Argument());
+		Complex degree = a*right;
+		return Complex(pow(exponena, degree.RePart()) * cos(degree.ImPart()), pow(exponena, degree.RePart()) * sin(degree.ImPart()));
 	}
-	Complex<T> MakeConjugate(){
-		return Complex<T>(real_part,-complex_part);
+	Complex MakeConjugate()const{
+		return Complex(real_part,-complex_part);
 	}
 	
-	double Argument()
+	double Argument()const
 	{
 		return acos(real_part / Module());
 	}
-	double Module(){
+	double Module()	 const{
 		return sqrt(real_part*real_part + complex_part*complex_part);
 	}
 
-	T RePart()
+	double RePart()  const
 	{
 		return real_part;
 	}
-	T ImPart()
+	double ImPart()  const
 	{
 		return complex_part;
 	}
 	
 private:
-	T real_part;
-	T complex_part;
+	double real_part;
+	double complex_part;
 };
+
+Complex operator + (const double & left, const Complex & right){
+	return right + left;
+}
+Complex operator - (const double & left, const Complex & right){
+	return right * (-1) + left;
+}
+Complex operator * (const double & left, const Complex & right){
+	return right * left;
+}
+Complex operator / (const double & left, const Complex & right){
+	return right.MakeConjugate() *  left / pow(right.Module(),2);
+}
+
+bool operator == (const double & left, const Complex & right){
+	return right == left;
+}
+bool operator != (const double & left, const Complex & right){
+	return right != left;
+}
+
+std::ostream & operator <<(std::ostream & is, const Complex & right)
+{
+	if (right == 0){
+		is << 0 << endl;
+		return is;
+	}
+
+	if (right.RePart() != 0)
+		is << " " << right.RePart();// << endl;
+	if (right.ImPart() != 0){
+		if (right.ImPart() < 0)
+			is << " - ";
+		else 
+			is << " + ";
+		is << "i * " << abs(right.ImPart()) << endl;
+	}
+}
+std::istream & operator >>(std::istream & is, Complex & right)
+{
+	regex re_cmp_exp("(\\s*(\\+|\\-)\\s*(i\\s*\\*\\s*)?(\\d+(?:\\.\\d+)?))+");
+	regex re_cmp_num("^\\s*(\\+|\\-)\\s*(i\\s*\\*\\s*)?(\\d+(?:\\.\\d+)?)");
+	string str;
+	smatch match;
+
+	getline(is, str);
+
+	if (!regex_match(str, re_cmp_exp)) {
+		str = "+" + str;
+	}
+
+	if (regex_match(str, re_cmp_exp)) {
+		double tmp;
+		while (regex_search(str, match, re_cmp_num)) {
+
+			tmp = (match[1].str() == "+" ? +1 : -1)*stod(match[3].str());
+			if (match[2].str() == "") {
+				right += Complex(tmp, 0);
+			}
+			else {
+				right += Complex(0, tmp);
+			}
+			str = match.suffix().str();
+		}
+	}
+
+	return is;
+}
