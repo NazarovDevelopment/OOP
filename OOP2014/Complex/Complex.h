@@ -194,6 +194,7 @@ std::ostream & operator <<(std::ostream & is, const Complex & right)
 			is << " + ";
 		is << "i * " << abs(right.ImPart()) << endl;
 	}
+	return is;
 }
 std::istream & operator >>(std::istream & is, Complex & right)
 {
@@ -224,4 +225,9 @@ std::istream & operator >>(std::istream & is, Complex & right)
 	}
 
 	return is;
+}
+
+double abs(const Complex&  cmp)
+{
+	return cmp.Module();
 }

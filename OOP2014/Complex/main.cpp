@@ -12,8 +12,10 @@ using namespace std;
 void main()
 {
 	Complex cmp;
+	Complex cmp1(2, 6);
+	double a = abs(cmp1);
 
-	cin >> cmp;
+	cmp = a;
 
 	system("pause");
 }
