@@ -117,6 +117,9 @@ public:
 		return !((*this) == right);
 	}
 
+	friend std::ostream & operator <<(std::ostream & is, const Complex & right);
+	friend std::istream & operator >>(std::istream & is, Complex & right);
+
 	//functions 
 	Complex Pow(const double & right) const
 	{
@@ -185,14 +188,14 @@ std::ostream & operator <<(std::ostream & is, const Complex & right)
 		return is;
 	}
 
-	if (right.RePart() != 0)
-		is << " " << right.RePart();// << endl;
-	if (right.ImPart() != 0){
-		if (right.ImPart() < 0)
+	if (right.real_part != 0)
+		is << " " << right.real_part;// << endl;
+	if (right.complex_part != 0){
+		if (right.complex_part < 0)
 			is << " - ";
 		else 
 			is << " + ";
-		is << "i * " << abs(right.ImPart()) << endl;
+		is << "i * " << abs(right.complex_part) << endl;
 	}
 	return is;
 }
