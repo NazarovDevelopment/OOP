@@ -44,8 +44,14 @@ public:
 
 	SmartPointer<T, C> & operator= (const SmartPointer<T, C> & smartPtr);
 	SmartPointer<T, C> & operator= (const std::auto_ptr<T> & smartPtr);
-	T& operator*() const { return *crude_ptr; }
-	T* operator->() const { return crude_ptr; }
+	T& operator*() const { 
+		C::call();
+		return *crude_ptr;
+	}
+	T* operator->() const {
+		C::call();
+		return crude_ptr;
+	}
 
 	bool operator == (const SmartPointer<T, C> & smartPtr){
 		return *crude_ptr == *smartPtr;
@@ -115,7 +121,7 @@ public:
 	long UseCount() const; // возвращает кол-во ссылок на “сырой указатель”
 	bool Unique() const; // возвращает равно ли кол-во ссылок на “сырой указатель” 1
 	
-	T* Get(){return crude_ptr} // возвращает "сырой указатель"
+	T* Get(){ return crude_ptr; } // возвращает "сырой указатель"
 private:
 	void CheckAndRemove();
 private:
@@ -215,7 +221,7 @@ void SmartPointer<T, C>::CheckAndRemove()
 }
 
 
-//-------------------operators----------------------
+//-------------------Operators----------------------
 template<class T, class C>
 bool operator == (const std::auto_ptr<T> & smartPtrL, const SmartPointer<T, C> & smartPtrR){
 	return *smartPtrL == *smartPtrR;

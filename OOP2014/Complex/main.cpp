@@ -15,6 +15,7 @@ void main()
 	Complex cmp1(2, 6);
 	double a = abs(cmp1);
 
+	sin(cmp);
 	cmp = a;
 
 	system("pause");
