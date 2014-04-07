@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D9838063-2EFC-4D1E-AF13-D620031844FE}</ProjectGuid>
-    <RootNamespace>quadtree</RootNamespace>
+    <ProjectGuid>{37EF2D7E-2637-470B-B431-14E2BA7D5175}</ProjectGuid>
+    <RootNamespace>Singleton</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,13 +64,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="point.cpp" />
-    <ClCompile Include="rectangle.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="ConfigurationFile.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="quadtree.h" />
+    <ClInclude Include="ConfigurationFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

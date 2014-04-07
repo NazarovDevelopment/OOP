@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D9838063-2EFC-4D1E-AF13-D620031844FE}</ProjectGuid>
-    <RootNamespace>quadtree</RootNamespace>
+    <ProjectGuid>{BF7FF06A-F6D4-4F7C-A0CD-08EC03D41C37}</ProjectGuid>
+    <RootNamespace>TextEditor</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,13 +64,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="point.cpp" />
-    <ClCompile Include="rectangle.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="tree.cpp" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="Text.Editor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="quadtree.h" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
